@@ -9,7 +9,7 @@ description = "Cloud storage integrations for Django (Box, Dropbox, Google Drive
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "NEMATI AI", email = "alinemati@nemati.ai"}
+    {name = "NEMATI AI", email = "dev@nemati.ai"}
 ]
 requires-python = ">=3.10"
 dependencies = [

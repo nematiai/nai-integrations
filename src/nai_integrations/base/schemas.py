@@ -10,6 +10,7 @@ from ninja import Schema
 
 class ConnectionStatusOut(Schema):
     """Schema for connection status response."""
+
     connected: bool
     email: Optional[str] = None
     display_name: Optional[str] = None
@@ -19,21 +20,24 @@ class ConnectionStatusOut(Schema):
 
 class AuthorizeOut(Schema):
     """Schema for authorization response."""
+
     authorization_url: str
     message: str
 
 
 class DisconnectOut(Schema):
     """Schema for disconnect response."""
+
     success: bool
     message: str
 
 
 class FileInfo(Schema):
     """Schema for file/folder information."""
+
     name: str
     path: str
-    type: str  # 'file' or 'folder'
+    type: str
     size: Optional[int] = None
     modified: Optional[datetime] = None
     id: Optional[str] = None
@@ -41,6 +45,7 @@ class FileInfo(Schema):
 
 class ContentsOut(Schema):
     """Schema for folder contents listing."""
+
     path: str
     entries: List[FileInfo]
     total_count: int

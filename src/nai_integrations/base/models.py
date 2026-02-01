@@ -7,7 +7,6 @@ from datetime import timedelta
 
 from cryptography.fernet import Fernet, InvalidToken
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 
@@ -17,67 +16,32 @@ logger = logging.getLogger(__name__)
 class BaseCloudAuth(models.Model):
     """
     Abstract base model for storing OAuth tokens for cloud storage providers.
-    
-    All provider-specific models should inherit from this class.
     Provides encrypted token storage and common functionality.
     """
-    
+
     user = models.OneToOneField(
-        get_user_model(),
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        help_text="User who connected this cloud storage"
+        help_text="User who connected this cloud storage",
     )
     _access_token = models.TextField(
-        db_column='access_token',
-        help_text="Encrypted access token"
+        db_column="access_token", help_text="Encrypted access token"
     )
     _refresh_token = models.TextField(
-        db_column='refresh_token',
+        db_column="refresh_token",
         blank=True,
         null=True,
-        help_text="Encrypted refresh token for automatic renewal"
+        help_text="Encrypted refresh token",
     )
-    token_type = models.CharField(
-        max_length=50,
-        default="bearer",
-        help_text="Token type (usually bearer)"
-    )
-    expires_at = models.DateTimeField(
-        null=True,
-        blank=True,
-        help_text="When the access token expires"
-    )
-    account_id = models.CharField(
-        max_length=255,
-        blank=True,
-        help_text="Provider account ID"
-    )
-    email = models.EmailField(
-        blank=True,
-        help_text="Email associated with the account"
-    )
-    display_name = models.CharField(
-        max_length=255,
-        blank=True,
-        help_text="Display name from provider"
-    )
-    scopes = models.JSONField(
-        default=list,
-        blank=True,
-        help_text="List of granted OAuth scopes"
-    )
-    connected_at = models.DateTimeField(
-        auto_now_add=True,
-        help_text="When the account was first connected"
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        help_text="Last time the tokens were updated"
-    )
-    is_active = models.BooleanField(
-        default=True,
-        help_text="Whether the connection is active"
-    )
+    token_type = models.CharField(max_length=50, default="bearer")
+    expires_at = models.DateTimeField(null=True, blank=True)
+    account_id = models.CharField(max_length=255, blank=True)
+    email = models.EmailField(blank=True)
+    display_name = models.CharField(max_length=255, blank=True)
+    scopes = models.JSONField(default=list, blank=True)
+    connected_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         abstract = True
@@ -90,16 +54,12 @@ class BaseCloudAuth(models.Model):
         provider = self.__class__.__name__.replace("Auth", "")
         return f"{provider} - {self.user.username} ({self.email})"
 
-    # =========================================================================
-    # Token Encryption/Decryption
-    # =========================================================================
-
     @staticmethod
     def _get_encryption_key():
         """Get the encryption key from settings."""
-        key = getattr(settings, 'TOKEN_ENCRYPTION_KEY', None)
+        key = getattr(settings, "TOKEN_ENCRYPTION_KEY", None)
         if not key:
-            logger.warning("TOKEN_ENCRYPTION_KEY not set, tokens will be stored unencrypted")
+            logger.warning("TOKEN_ENCRYPTION_KEY not set")
         return key
 
     @classmethod
@@ -107,11 +67,9 @@ class BaseCloudAuth(models.Model):
         """Encrypt a token for storage."""
         if not token:
             return token
-            
         key = cls._get_encryption_key()
         if not key:
             return token
-            
         try:
             f = Fernet(key.encode() if isinstance(key, str) else key)
             return f.encrypt(token.encode()).decode()
@@ -124,25 +82,18 @@ class BaseCloudAuth(models.Model):
         """Decrypt a stored token."""
         if not encrypted:
             return encrypted
-            
         key = cls._get_encryption_key()
         if not key:
             return encrypted
-            
         try:
             f = Fernet(key.encode() if isinstance(key, str) else key)
             return f.decrypt(encrypted.encode()).decode()
         except InvalidToken:
-            # Token might not be encrypted (legacy data)
             logger.warning("Token decryption failed - may be unencrypted legacy data")
             return encrypted
         except Exception as e:
             logger.error(f"Token decryption failed: {e}")
             return encrypted
-
-    # =========================================================================
-    # Property-based access for encrypted tokens
-    # =========================================================================
 
     @property
     def decrypted_access_token(self) -> str:
@@ -169,10 +120,6 @@ class BaseCloudAuth(models.Model):
         else:
             self._refresh_token = None
 
-    # =========================================================================
-    # Token Status Methods
-    # =========================================================================
-
     def is_token_expired(self) -> bool:
         """Check if the access token has expired."""
         if not self.expires_at:
@@ -180,15 +127,7 @@ class BaseCloudAuth(models.Model):
         return timezone.now() >= self.expires_at
 
     def needs_refresh(self, buffer_minutes: int = 5) -> bool:
-        """
-        Check if token needs refresh.
-        
-        Args:
-            buffer_minutes: Refresh if token expires within this many minutes
-            
-        Returns:
-            True if token should be refreshed
-        """
+        """Check if token needs refresh."""
         if not self.expires_at:
             return False
         buffer = timedelta(minutes=buffer_minutes)
@@ -197,5 +136,5 @@ class BaseCloudAuth(models.Model):
     def time_until_expiry(self) -> timedelta:
         """Get time remaining until token expires."""
         if not self.expires_at:
-            return timedelta(days=365)  # Return large value if no expiry
+            return timedelta(days=365)
         return self.expires_at - timezone.now()

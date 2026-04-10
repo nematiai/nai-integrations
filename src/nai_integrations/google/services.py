@@ -154,7 +154,9 @@ class GoogleDriveService(BaseCloudService):
             )
         )
         if response.status_code != 200:
-            raise TokenRefreshError(f"Failed to get account info: {response.status_code}")
+            raise TokenRefreshError(
+                f"Failed to get account info: {response.status_code}"
+            )
         return response.json()
 
     def list_folder(
@@ -178,7 +180,9 @@ class GoogleDriveService(BaseCloudService):
         response = self._make_api_request("GET", "files", params=params)
         return response.json()
 
-    def list_all_files(self, page_size: int = 100, query: Optional[str] = None) -> Dict[str, Any]:
+    def list_all_files(
+        self, page_size: int = 100, query: Optional[str] = None
+    ) -> Dict[str, Any]:
         params = {
             "pageSize": min(page_size, 100),
             "fields": "files(id,name,mimeType,size,createdTime,modifiedTime,webViewLink)",
@@ -190,5 +194,7 @@ class GoogleDriveService(BaseCloudService):
         return response.json()
 
     def download_file(self, file_id: str) -> bytes:
-        response = self._make_api_request("GET", f"files/{file_id}", params={"alt": "media"})
+        response = self._make_api_request(
+            "GET", f"files/{file_id}", params={"alt": "media"}
+        )
         return response.content

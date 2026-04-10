@@ -10,4 +10,5 @@ from .models import OneDriveAuth
 @admin.register(OneDriveAuth)
 class OneDriveAuthAdmin(BaseCloudAuthAdmin):
     """Admin interface for OneDrive authentications."""
+
     pass

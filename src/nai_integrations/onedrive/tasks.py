@@ -17,19 +17,25 @@ def get_refresh_task():
     except ImportError:
         return None
 
-    @shared_task(name="nai-integrations-refresh-onedrive-tokens", bind=True, max_retries=3)
+    @shared_task(
+        name="nai-integrations-refresh-onedrive-tokens", bind=True, max_retries=3
+    )
     def refresh_expiring_onedrive_tokens(self) -> Dict[str, Any]:
         from .models import OneDriveAuth
         from .services import OneDriveService
 
         try:
             cutoff_time = timezone.now() + timedelta(hours=6)
-            expiring_tokens = OneDriveAuth.objects.filter(
-                expires_at__lte=cutoff_time,
-                expires_at__gt=timezone.now(),
-                _refresh_token__isnull=False,
-                is_active=True,
-            ).exclude(_refresh_token="").select_related("user")
+            expiring_tokens = (
+                OneDriveAuth.objects.filter(
+                    expires_at__lte=cutoff_time,
+                    expires_at__gt=timezone.now(),
+                    _refresh_token__isnull=False,
+                    is_active=True,
+                )
+                .exclude(_refresh_token="")
+                .select_related("user")
+            )
 
             success_count = 0
             for onedrive_auth in expiring_tokens:

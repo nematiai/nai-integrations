@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,27 +14,60 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='OneDriveAuth',
+            name="OneDriveAuth",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('_access_token', models.TextField(db_column='access_token', help_text='Encrypted access token')),
-                ('_refresh_token', models.TextField(blank=True, db_column='refresh_token', help_text='Encrypted refresh token', null=True)),
-                ('token_type', models.CharField(default='bearer', max_length=50)),
-                ('expires_at', models.DateTimeField(blank=True, null=True)),
-                ('account_id', models.CharField(blank=True, max_length=255)),
-                ('email', models.EmailField(blank=True, max_length=254)),
-                ('display_name', models.CharField(blank=True, max_length=255)),
-                ('scopes', models.JSONField(blank=True, default=list)),
-                ('connected_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('user', models.OneToOneField(help_text='User who connected this cloud storage', on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "_access_token",
+                    models.TextField(
+                        db_column="access_token", help_text="Encrypted access token"
+                    ),
+                ),
+                (
+                    "_refresh_token",
+                    models.TextField(
+                        blank=True,
+                        db_column="refresh_token",
+                        help_text="Encrypted refresh token",
+                        null=True,
+                    ),
+                ),
+                ("token_type", models.CharField(default="bearer", max_length=50)),
+                ("expires_at", models.DateTimeField(blank=True, null=True)),
+                ("account_id", models.CharField(blank=True, max_length=255)),
+                ("email", models.EmailField(blank=True, max_length=254)),
+                ("display_name", models.CharField(blank=True, max_length=255)),
+                ("scopes", models.JSONField(blank=True, default=list)),
+                ("connected_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("is_active", models.BooleanField(default=True)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        help_text="User who connected this cloud storage",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'OneDrive Authentication',
-                'verbose_name_plural': 'OneDrive Authentications',
-                'db_table': 'nai_onedrive_auth',
-                'indexes': [models.Index(fields=['user', 'is_active'], name='nai_od_user_active_idx'), models.Index(fields=['expires_at'], name='nai_od_expires_idx')],
+                "verbose_name": "OneDrive Authentication",
+                "verbose_name_plural": "OneDrive Authentications",
+                "db_table": "nai_onedrive_auth",
+                "indexes": [
+                    models.Index(
+                        fields=["user", "is_active"], name="nai_od_user_active_idx"
+                    ),
+                    models.Index(fields=["expires_at"], name="nai_od_expires_idx"),
+                ],
             },
         ),
     ]

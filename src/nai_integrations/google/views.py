@@ -14,7 +14,12 @@ from ninja.errors import HttpError
 
 from nai_integrations.contrib.auth import require_auth
 
-from .schemas import GoogleAuthorizeOut, GoogleDisconnectOut, GoogleDriveContentsOut, GoogleStatusOut
+from .schemas import (
+    GoogleAuthorizeOut,
+    GoogleDisconnectOut,
+    GoogleDriveContentsOut,
+    GoogleStatusOut,
+)
 from .services import GoogleDriveService
 
 logger = logging.getLogger(__name__)
@@ -22,7 +27,9 @@ router = Router(tags=["Google Drive Integration"])
 User = get_user_model()
 
 
-@router.get("/status/", response=GoogleStatusOut, summary="Check Google Drive connection status")
+@router.get(
+    "/status/", response=GoogleStatusOut, summary="Check Google Drive connection status"
+)
 def check_google_drive_connection(request: HttpRequest):
     user = require_auth(request)
     service = GoogleDriveService(user)
@@ -32,7 +39,9 @@ def check_google_drive_connection(request: HttpRequest):
 
     if service.auth.needs_refresh():
         if not service.refresh_access_token():
-            return GoogleStatusOut(connected=False, message="Token expired and refresh failed")
+            return GoogleStatusOut(
+                connected=False, message="Token expired and refresh failed"
+            )
         service._load_auth()
 
     return GoogleStatusOut(
@@ -47,7 +56,9 @@ def check_google_drive_connection(request: HttpRequest):
     )
 
 
-@router.post("/authorize/", response=GoogleAuthorizeOut, summary="Initiate Google OAuth flow")
+@router.post(
+    "/authorize/", response=GoogleAuthorizeOut, summary="Initiate Google OAuth flow"
+)
 def initiate_google_oauth(request: HttpRequest):
     user = require_auth(request)
     redirect_uri = os.getenv("GOOGLE_DRIVE_REDIRECT_URI")
@@ -68,7 +79,9 @@ def initiate_google_oauth(request: HttpRequest):
     )
 
 
-@router.delete("/disconnect/", response=GoogleDisconnectOut, summary="Disconnect Google Drive")
+@router.delete(
+    "/disconnect/", response=GoogleDisconnectOut, summary="Disconnect Google Drive"
+)
 def disconnect_google_drive(request: HttpRequest):
     user = require_auth(request)
     service = GoogleDriveService(user)
@@ -80,12 +93,18 @@ def disconnect_google_drive(request: HttpRequest):
     return GoogleDisconnectOut(
         connected=False,
         user_id=user.id,
-        message="Google Drive disconnected successfully" if success else "Disconnect failed",
+        message="Google Drive disconnected successfully"
+        if success
+        else "Disconnect failed",
         token_revoked=success,
     )
 
 
-@router.get("/drive/contents/", response=GoogleDriveContentsOut, summary="List Google Drive contents")
+@router.get(
+    "/drive/contents/",
+    response=GoogleDriveContentsOut,
+    summary="List Google Drive contents",
+)
 def list_google_drive_contents(request: HttpRequest):
     user = require_auth(request)
     service = GoogleDriveService(user)
@@ -135,7 +154,9 @@ def list_google_drive_contents(request: HttpRequest):
                 "total_folders": len(folder_items),
             },
             token_info={
-                "expires_at": service.auth.expires_at.isoformat() if service.auth.expires_at else None,
+                "expires_at": service.auth.expires_at.isoformat()
+                if service.auth.expires_at
+                else None,
                 "scopes": service.auth.scopes,
             },
             message=f"Successfully accessed Google Drive. Found {len(files)} items.",
@@ -156,16 +177,22 @@ def google_callback(request: HttpRequest):
 
     expected_state = request.session.get("google_auth_state")
     if not state or not expected_state or state != expected_state:
-        return render(request, "google/callback_error.html", {"error": "Invalid state parameter"})
+        return render(
+            request, "google/callback_error.html", {"error": "Invalid state parameter"}
+        )
 
     user_id = request.session.get("google_auth_user_id")
     if not user_id:
-        return render(request, "google/callback_error.html", {"error": "User session not found"})
+        return render(
+            request, "google/callback_error.html", {"error": "User session not found"}
+        )
 
     try:
         user = User.objects.get(id=user_id)
     except User.DoesNotExist:
-        return render(request, "google/callback_error.html", {"error": "User not found"})
+        return render(
+            request, "google/callback_error.html", {"error": "User not found"}
+        )
 
     for key in ["google_auth_user_id", "google_auth_state"]:
         if key in request.session:
@@ -174,7 +201,11 @@ def google_callback(request: HttpRequest):
 
     redirect_uri = os.getenv("GOOGLE_DRIVE_REDIRECT_URI")
     if not redirect_uri:
-        return render(request, "google/callback_error.html", {"error": "Server configuration error"})
+        return render(
+            request,
+            "google/callback_error.html",
+            {"error": "Server configuration error"},
+        )
 
     try:
         service = GoogleDriveService(user)
@@ -188,7 +219,9 @@ def google_callback(request: HttpRequest):
         email = account_info.get("email", "")
         name = account_info.get("name", "")
 
-        return render(request, "google/callback_success.html", {"email": email, "name": name})
+        return render(
+            request, "google/callback_success.html", {"email": email, "name": name}
+        )
     except Exception as e:
         logger.error(f"Google OAuth callback error: {e}", exc_info=True)
         return render(request, "google/callback_error.html", {"error": str(e)})

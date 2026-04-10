@@ -30,7 +30,9 @@ router = Router(tags=["OneDrive Integration"])
 User = get_user_model()
 
 
-@router.get("/status/", response=OneDriveStatusOut, summary="Check OneDrive connection status")
+@router.get(
+    "/status/", response=OneDriveStatusOut, summary="Check OneDrive connection status"
+)
 def get_onedrive_status(request: HttpRequest):
     user = require_auth(request)
     service = OneDriveService(user)
@@ -38,7 +40,9 @@ def get_onedrive_status(request: HttpRequest):
     return OneDriveStatusOut(**status)
 
 
-@router.post("/authorize/", response=OneDriveAuthorizeOut, summary="Initiate OneDrive OAuth")
+@router.post(
+    "/authorize/", response=OneDriveAuthorizeOut, summary="Initiate OneDrive OAuth"
+)
 def authorize_onedrive(request: HttpRequest):
     user = require_auth(request)
     state_token = secrets.token_urlsafe(32)
@@ -58,7 +62,9 @@ def authorize_onedrive(request: HttpRequest):
     )
 
 
-@router.delete("/disconnect/", response=OneDriveDisconnectOut, summary="Disconnect OneDrive")
+@router.delete(
+    "/disconnect/", response=OneDriveDisconnectOut, summary="Disconnect OneDrive"
+)
 def disconnect_onedrive(request: HttpRequest):
     user = require_auth(request)
     service = OneDriveService(user)
@@ -67,11 +73,15 @@ def disconnect_onedrive(request: HttpRequest):
     success = service.disconnect()
     return OneDriveDisconnectOut(
         success=success,
-        message="OneDrive account disconnected successfully" if success else "Failed to disconnect",
+        message="OneDrive account disconnected successfully"
+        if success
+        else "Failed to disconnect",
     )
 
 
-@router.get("/contents/", response=OneDriveContentsOut, summary="List OneDrive folder contents")
+@router.get(
+    "/contents/", response=OneDriveContentsOut, summary="List OneDrive folder contents"
+)
 def get_onedrive_contents(request: HttpRequest):
     user = require_auth(request)
     service = OneDriveService(user)
@@ -90,7 +100,9 @@ def get_onedrive_contents(request: HttpRequest):
             modified = None
             if entry.get("lastModifiedDateTime"):
                 try:
-                    modified = datetime.fromisoformat(entry["lastModifiedDateTime"].replace("Z", "+00:00"))
+                    modified = datetime.fromisoformat(
+                        entry["lastModifiedDateTime"].replace("Z", "+00:00")
+                    )
                 except Exception:
                     pass
 
@@ -123,26 +135,44 @@ def onedrive_callback(request: HttpRequest):
     error_description = request.GET.get("error_description", "")
 
     if error:
-        return render(request, "onedrive/callback_error.html", {"error": error, "error_description": error_description})
+        return render(
+            request,
+            "onedrive/callback_error.html",
+            {"error": error, "error_description": error_description},
+        )
 
     if not code or not state:
-        return render(request, "onedrive/callback_error.html", {"error": "Missing authorization code or state"})
+        return render(
+            request,
+            "onedrive/callback_error.html",
+            {"error": "Missing authorization code or state"},
+        )
 
     cache_key = f"nai_onedrive_state:{state}"
     user_id = cache.get(cache_key)
     if not user_id:
-        return render(request, "onedrive/callback_error.html", {"error": "Invalid or expired session"})
+        return render(
+            request,
+            "onedrive/callback_error.html",
+            {"error": "Invalid or expired session"},
+        )
 
     cache.delete(cache_key)
 
     try:
         user = User.objects.get(id=user_id)
     except User.DoesNotExist:
-        return render(request, "onedrive/callback_error.html", {"error": "User not found"})
+        return render(
+            request, "onedrive/callback_error.html", {"error": "User not found"}
+        )
 
     callback_url = os.getenv("ONEDRIVE_REDIRECT_URI")
     if not callback_url:
-        return render(request, "onedrive/callback_error.html", {"error": "Server configuration error"})
+        return render(
+            request,
+            "onedrive/callback_error.html",
+            {"error": "Server configuration error"},
+        )
 
     try:
         service = OneDriveService(user)
@@ -156,8 +186,14 @@ def onedrive_callback(request: HttpRequest):
         except Exception:
             account_info = {}
 
-        email = account_info.get("userPrincipalName", "") or account_info.get("mail", "") or "Unknown"
-        return render(request, "onedrive/callback_success.html", {"onedrive_email": email})
+        email = (
+            account_info.get("userPrincipalName", "")
+            or account_info.get("mail", "")
+            or "Unknown"
+        )
+        return render(
+            request, "onedrive/callback_success.html", {"onedrive_email": email}
+        )
 
     except Exception as e:
         logger.error(f"OneDrive callback error: {e}", exc_info=True)

@@ -32,10 +32,16 @@ class BaseCloudAuthAdmin(BaseModelAdmin):
     readonly_fields = ("connected_at", "updated_at", "account_id")
 
     fieldsets = (
-        ("User Information", {"fields": ("user", "email", "display_name", "account_id")}),
+        (
+            "User Information",
+            {"fields": ("user", "email", "display_name", "account_id")},
+        ),
         (
             "Token Information",
-            {"fields": ("token_type", "expires_at", "scopes"), "classes": ("collapse",)},
+            {
+                "fields": ("token_type", "expires_at", "scopes"),
+                "classes": ("collapse",),
+            },
         ),
         ("Status", {"fields": ("is_active", "connected_at", "updated_at")}),
     )

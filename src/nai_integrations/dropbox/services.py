@@ -132,7 +132,9 @@ class DropboxService(BaseCloudService):
 
     def list_folder_continue(self, cursor: str) -> Dict[str, Any]:
         data = {"cursor": cursor}
-        response = self._make_api_request("POST", "files/list_folder/continue", json=data)
+        response = self._make_api_request(
+            "POST", "files/list_folder/continue", json=data
+        )
         return response.json()
 
     def download_file(self, path: str) -> bytes:

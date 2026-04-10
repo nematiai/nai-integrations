@@ -30,12 +30,16 @@ def get_refresh_task():
 
         try:
             cutoff_time = timezone.now() + timedelta(hours=6)
-            expiring_tokens = DropboxAuth.objects.filter(
-                expires_at__lte=cutoff_time,
-                expires_at__gt=timezone.now(),
-                _refresh_token__isnull=False,
-                is_active=True,
-            ).exclude(_refresh_token="").select_related("user")
+            expiring_tokens = (
+                DropboxAuth.objects.filter(
+                    expires_at__lte=cutoff_time,
+                    expires_at__gt=timezone.now(),
+                    _refresh_token__isnull=False,
+                    is_active=True,
+                )
+                .exclude(_refresh_token="")
+                .select_related("user")
+            )
 
             total_tokens = expiring_tokens.count()
             if total_tokens == 0:

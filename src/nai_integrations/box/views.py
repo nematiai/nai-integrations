@@ -172,7 +172,10 @@ def box_callback(request: HttpRequest):
             return render(
                 request,
                 "box/callback_error.html",
-                {"error": "User not authenticated", "description": "Please log in and try again."},
+                {
+                    "error": "User not authenticated",
+                    "description": "Please log in and try again.",
+                },
             )
 
         try:

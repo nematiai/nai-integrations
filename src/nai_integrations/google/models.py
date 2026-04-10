@@ -16,7 +16,9 @@ class GoogleAuth(BaseCloudAuth):
         verbose_name = "Google Authentication"
         verbose_name_plural = "Google Authentications"
         indexes = [
-            models.Index(fields=["user", "is_active"], name="nai_google_user_active_idx"),
+            models.Index(
+                fields=["user", "is_active"], name="nai_google_user_active_idx"
+            ),
             models.Index(fields=["expires_at"], name="nai_google_expires_idx"),
             models.Index(fields=["email"], name="nai_google_email_idx"),
         ]

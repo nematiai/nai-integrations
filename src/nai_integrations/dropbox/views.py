@@ -28,7 +28,9 @@ router = Router(tags=["Dropbox Integration"])
 User = get_user_model()
 
 
-@router.get("/status/", response=DropboxStatusOut, summary="Check Dropbox connection status")
+@router.get(
+    "/status/", response=DropboxStatusOut, summary="Check Dropbox connection status"
+)
 def get_dropbox_status(request: HttpRequest):
     user = require_auth(request)
     service = DropboxService(user)
@@ -36,7 +38,9 @@ def get_dropbox_status(request: HttpRequest):
     return DropboxStatusOut(**status)
 
 
-@router.post("/authorize/", response=DropboxAuthorizeOut, summary="Initiate Dropbox OAuth")
+@router.post(
+    "/authorize/", response=DropboxAuthorizeOut, summary="Initiate Dropbox OAuth"
+)
 def authorize_dropbox(request: HttpRequest):
     user = require_auth(request)
     callback_url = os.getenv(
@@ -55,7 +59,9 @@ def authorize_dropbox(request: HttpRequest):
     )
 
 
-@router.delete("/disconnect/", response=DropboxDisconnectOut, summary="Disconnect Dropbox")
+@router.delete(
+    "/disconnect/", response=DropboxDisconnectOut, summary="Disconnect Dropbox"
+)
 def disconnect_dropbox(request: HttpRequest):
     user = require_auth(request)
     service = DropboxService(user)
@@ -64,11 +70,15 @@ def disconnect_dropbox(request: HttpRequest):
     success = service.disconnect()
     return DropboxDisconnectOut(
         success=success,
-        message="Dropbox account disconnected successfully" if success else "Failed to disconnect",
+        message="Dropbox account disconnected successfully"
+        if success
+        else "Failed to disconnect",
     )
 
 
-@router.get("/contents/", response=DropboxContentsOut, summary="List Dropbox folder contents")
+@router.get(
+    "/contents/", response=DropboxContentsOut, summary="List Dropbox folder contents"
+)
 def get_dropbox_contents(request: HttpRequest):
     user = require_auth(request)
     service = DropboxService(user)
@@ -110,19 +120,31 @@ def dropbox_callback(request: HttpRequest):
     error_description = request.GET.get("error_description", "")
 
     if error:
-        return render(request, "dropbox/callback_error.html", {"error": error_description or error})
+        return render(
+            request,
+            "dropbox/callback_error.html",
+            {"error": error_description or error},
+        )
 
     if not code:
-        return render(request, "dropbox/callback_error.html", {"error": "No authorization code"})
+        return render(
+            request, "dropbox/callback_error.html", {"error": "No authorization code"}
+        )
 
     expected_state = request.session.get("dropbox_auth_state")
     if not state or not expected_state or state != expected_state:
-        return render(request, "dropbox/callback_error.html", {"error": "Invalid state parameter"})
+        return render(
+            request, "dropbox/callback_error.html", {"error": "Invalid state parameter"}
+        )
 
     try:
         user_id = request.session.get("dropbox_auth_user_id")
         if not user_id:
-            return render(request, "dropbox/callback_error.html", {"error": "User session not found"})
+            return render(
+                request,
+                "dropbox/callback_error.html",
+                {"error": "User session not found"},
+            )
 
         user = User.objects.get(id=user_id)
         service = DropboxService(user)

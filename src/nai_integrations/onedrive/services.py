@@ -46,7 +46,9 @@ class OneDriveService(BaseCloudService):
             raise ConfigurationError("OneDrive credentials not configured")
         return client_id, client_secret
 
-    def get_authorization_url(self, redirect_uri: str, state: Optional[str] = None) -> str:
+    def get_authorization_url(
+        self, redirect_uri: str, state: Optional[str] = None
+    ) -> str:
         client_id, _ = self._get_credentials()
         if not state:
             state = secrets.token_urlsafe(32)
@@ -108,7 +110,8 @@ class OneDriveService(BaseCloudService):
     def _extract_account_info(self, account_info: Dict[str, Any]) -> Dict[str, Any]:
         return {
             "account_id": account_info.get("id", ""),
-            "email": account_info.get("userPrincipalName", "") or account_info.get("mail", ""),
+            "email": account_info.get("userPrincipalName", "")
+            or account_info.get("mail", ""),
             "display_name": account_info.get("displayName", ""),
         }
 
@@ -116,9 +119,15 @@ class OneDriveService(BaseCloudService):
         response = self._make_api_request("GET", "me")
         return response.json()
 
-    def list_folder(self, folder_id: str = "root", limit: int = 100, **kwargs) -> Dict[str, Any]:
+    def list_folder(
+        self, folder_id: str = "root", limit: int = 100, **kwargs
+    ) -> Dict[str, Any]:
         params = {"$top": min(limit, 200)}
-        endpoint = "me/drive/root/children" if folder_id == "root" else f"me/drive/items/{folder_id}/children"
+        endpoint = (
+            "me/drive/root/children"
+            if folder_id == "root"
+            else f"me/drive/items/{folder_id}/children"
+        )
         response = self._make_api_request("GET", endpoint, params=params)
         return response.json()
 

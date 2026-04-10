@@ -212,7 +212,9 @@ class BaseCloudService(ABC):
                     )
                     time.sleep(delay)
                 else:
-                    logger.error(f"API call failed after {max_retries + 1} attempts: {e}")
+                    logger.error(
+                        f"API call failed after {max_retries + 1} attempts: {e}"
+                    )
                     raise
             except Exception:
                 raise

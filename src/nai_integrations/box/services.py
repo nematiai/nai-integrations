@@ -116,9 +116,7 @@ class BoxService(BaseCloudService):
                 "client_id": client_id,
                 "client_secret": client_secret,
             }
-            requests.post(
-                "https://api.box.com/oauth2/revoke", data=data, timeout=10
-            )
+            requests.post("https://api.box.com/oauth2/revoke", data=data, timeout=10)
         except Exception as e:
             logger.warning(f"Failed to revoke Box token: {e}")
 

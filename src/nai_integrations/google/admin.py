@@ -10,6 +10,7 @@ from .models import GoogleAuth
 @admin.register(GoogleAuth)
 class GoogleAuthAdmin(BaseCloudAuthAdmin):
     """Admin interface for Google authentications."""
+
     list_display = (
         "user_link",
         "email",

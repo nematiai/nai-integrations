@@ -1,0 +1,38 @@
+{
+  "model": "claude-opus-4-6",
+  "effortLevel": "high",
+  "env": {
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "80"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(cat *)",
+      "Bash(ls *)",
+      "Bash(find *)",
+      "Bash(mkdir *)",
+      "Bash(touch *)",
+      "Bash(wc *)",
+      "Bash(ruff *)",
+      "Bash(pytest *)",
+      "Bash(python -m pytest *)",
+      "Bash(python -c *)",
+      "Bash(docker-compose *)",
+      "Bash(docker compose *)",
+      "Bash(docker ps *)",
+      "Bash(docker logs *)",
+      "Bash(docker exec *)",
+      "Bash(curl -f http://localhost:9050/api/v1/health)",
+      "Bash(curl *)",
+      "Bash(xargs grep:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(drop *)",
+      "Bash(docker-compose down --volumes *)",
+      "Read(./.env)",
+      "Read(./.env.dev)",
+      "Read(./.env.prod)"
+    ]
+  }
+}

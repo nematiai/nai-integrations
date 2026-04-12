@@ -1,0 +1,96 @@
+{
+  "project": "nai-integrations",
+  "skills_found": [
+    "api-audit",
+    "dep-audit",
+    "full-app-audit",
+    "perf-audit",
+    "pre-commit",
+    "push-changelog",
+    "redo",
+    "release-check",
+    "resume",
+    "review",
+    "test-suite",
+    "validate"
+  ],
+  "priorities": {
+    "resume": "P1",
+    "redo": "P1",
+    "review": "P2",
+    "validate": "P2",
+    "pre-commit": "P0",
+    "push-changelog": "P2",
+    "test-suite": "P3",
+    "perf-audit": "P4",
+    "api-audit": "P4",
+    "dep-audit": "P4",
+    "full-app-audit": "P3",
+    "release-check": "P3"
+  },
+  "workflows": {
+    "daily": {
+      "label": "Daily / Every Session",
+      "icon": "☀️",
+      "stages": [
+        "resume",
+        "code",
+        "redo",
+        "review",
+        "validate",
+        "test-suite",
+        "pre-commit",
+        "push-changelog"
+      ]
+    },
+    "bugfix": {
+      "label": "Bug Fix",
+      "icon": "🐛",
+      "stages": [
+        "resume",
+        "code",
+        "redo",
+        "review",
+        "pre-commit",
+        "push-changelog"
+      ]
+    },
+    "feature": {
+      "label": "New Feature",
+      "icon": "🚀",
+      "stages": [
+        "resume",
+        "code",
+        "redo",
+        "review",
+        "validate",
+        "test-suite",
+        "pre-commit",
+        "push-changelog"
+      ]
+    },
+    "release": {
+      "label": "Release / Deploy",
+      "icon": "📦",
+      "stages": [
+        "resume",
+        "dep-audit",
+        "full-app-audit",
+        "test-suite",
+        "release-check",
+        "pre-commit",
+        "push-changelog"
+      ]
+    },
+    "audit": {
+      "label": "Full Audit",
+      "icon": "🔍",
+      "stages": [
+        "api-audit",
+        "dep-audit",
+        "full-app-audit",
+        "perf-audit"
+      ]
+    }
+  }
+}

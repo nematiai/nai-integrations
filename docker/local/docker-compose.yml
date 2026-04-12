@@ -1,0 +1,100 @@
+services:
+  nemi-api:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    container_name: nemi-api-dev
+    restart: unless-stopped
+    ports:
+      - "8012:8000"
+    env_file:
+      - ../../.env
+    environment:
+      DB_HOST: nemi-db
+      DB_PORT: 5432
+      REDIS_URL: redis://nemi-redis:6379/0
+    depends_on:
+      nemi-db:
+        condition: service_healthy
+      nemi-redis:
+        condition: service_healthy
+    volumes:
+      - ../../:/app
+
+  nemi-worker:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    container_name: nemi-worker-dev
+    restart: unless-stopped
+    command: celery -A config.celery worker -l info
+    env_file:
+      - ../../.env
+    environment:
+      DB_HOST: nemi-db
+      DB_PORT: 5432
+      REDIS_URL: redis://nemi-redis:6379/0
+    depends_on:
+      nemi-db:
+        condition: service_healthy
+      nemi-redis:
+        condition: service_healthy
+    volumes:
+      - ../../:/app
+
+  nemi-beat:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    container_name: nemi-beat-dev
+    restart: unless-stopped
+    command: celery -A config.celery beat -l info
+    env_file:
+      - ../../.env
+    environment:
+      DB_HOST: nemi-db
+      DB_PORT: 5432
+      REDIS_URL: redis://nemi-redis:6379/0
+    depends_on:
+      nemi-db:
+        condition: service_healthy
+      nemi-redis:
+        condition: service_healthy
+    volumes:
+      - ../../:/app
+
+  nemi-db:
+    image: postgres:16-alpine
+    container_name: nemi-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nemi
+      POSTGRES_USER: nemi
+      POSTGRES_PASSWORD: nemi
+    ports:
+      - "5434:5432"
+    volumes:
+      - nemi-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nemi -d nemi"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  nemi-redis:
+    image: redis:7-alpine
+    container_name: nemi-redis-dev
+    restart: unless-stopped
+    ports:
+      - "6381:6379"
+    volumes:
+      - nemi-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  nemi-postgres-data:
+  nemi-redis-data:

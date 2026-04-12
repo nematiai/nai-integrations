@@ -46,4 +46,5 @@ where = ["src"]
 "*" = ["templates/**/*.html", "migrations/*.py"]
 
 [tool.pytest.ini_options]
-python_files = ["test_*.py"]
+python_files = ["test_*.py", "tests.py", "tests_*.py"]
+DJANGO_SETTINGS_MODULE = "config.test_settings"

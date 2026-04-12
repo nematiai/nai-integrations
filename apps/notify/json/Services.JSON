@@ -1,0 +1,2015 @@
+{
+  "slack": {
+    "label": "Slack",
+    "icon": "slack",
+    "category": "chat",
+    "description": "Send notifications to Slack channels",
+    "fields": [
+      {
+        "name": "webhook_url",
+        "type": "url",
+        "required": true,
+        "label": "Webhook URL",
+        "placeholder": "https://hooks.slack.com/services/T.../B.../xxx",
+        "help_text": "Create at: https://api.slack.com/messaging/webhooks"
+      }
+    ],
+    "url_pattern": "slack://{tokens}",
+    "url_builder": "extract_slack_tokens"
+  },
+  "discord": {
+    "label": "Discord",
+    "icon": "discord",
+    "category": "chat",
+    "description": "Send notifications to Discord channels",
+    "fields": [
+      {
+        "name": "webhook_url",
+        "type": "url",
+        "required": true,
+        "label": "Webhook URL",
+        "placeholder": "https://discord.com/api/webhooks/...",
+        "help_text": "Server Settings → Integrations → Webhooks"
+      }
+    ],
+    "url_pattern": "discord://{webhook_id}/{webhook_token}",
+    "url_builder": "extract_discord_tokens"
+  },
+  "telegram": {
+    "label": "Telegram",
+    "icon": "telegram",
+    "category": "chat",
+    "description": "Send notifications via Telegram bot",
+    "fields": [
+      {
+        "name": "bot_token",
+        "type": "string",
+        "required": true,
+        "label": "Bot Token",
+        "placeholder": "123456789:ABCdefGHIjklMNOpqrsTUVwxyz",
+        "help_text": "Get from @BotFather"
+      },
+      {
+        "name": "chat_id",
+        "type": "string",
+        "required": true,
+        "label": "Chat ID",
+        "placeholder": "-1001234567890 or @channelname",
+        "help_text": "User ID, group ID, or @channel_username"
+      }
+    ],
+    "url_pattern": "tgram://{bot_token}/{chat_id}"
+  },
+  "msteams": {
+    "label": "Microsoft Teams",
+    "icon": "microsoft-teams",
+    "category": "chat",
+    "description": "Send notifications to Microsoft Teams channels",
+    "fields": [
+      {
+        "name": "webhook_url",
+        "type": "url",
+        "required": true,
+        "label": "Webhook URL",
+        "placeholder": "https://outlook.office.com/webhook/...",
+        "help_text": "Channel → Connectors → Incoming Webhook"
+      }
+    ],
+    "url_pattern": "msteams://{webhook_url}",
+    "url_builder": "encode_url"
+  },
+  "matrix": {
+    "label": "Matrix",
+    "icon": "matrix",
+    "category": "chat",
+    "description": "Send notifications to Matrix rooms",
+    "fields": [
+      {
+        "name": "homeserver",
+        "type": "string",
+        "required": true,
+        "label": "Homeserver",
+        "placeholder": "matrix.org"
+      },
+      {
+        "name": "token",
+        "type": "password",
+        "required": true,
+        "label": "Access Token",
+        "help_text": "Get from Element: Settings → Help & About → Access Token"
+      },
+      {
+        "name": "room_id",
+        "type": "string",
+        "required": true,
+        "label": "Room ID",
+        "placeholder": "!roomid:matrix.org"
+      }
+    ],
+    "url_pattern": "matrix://{token}@{homeserver}/{room_id}"
+  },
+  "mattermost": {
+    "label": "Mattermost",
+    "icon": "mattermost",
+    "category": "chat",
+    "description": "Send notifications to Mattermost channels",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": true,
+        "label": "Server Host",
+        "placeholder": "mattermost.example.com"
+      },
+      {
+        "name": "webhook_token",
+        "type": "password",
+        "required": true,
+        "label": "Webhook Token",
+        "help_text": "From incoming webhook URL"
+      },
+      {
+        "name": "channel",
+        "type": "string",
+        "required": false,
+        "label": "Channel",
+        "placeholder": "town-square"
+      }
+    ],
+    "url_pattern": "mmost://{host}/{webhook_token}/{channel}"
+  },
+  "rocketchat": {
+    "label": "Rocket.Chat",
+    "icon": "rocketchat",
+    "category": "chat",
+    "description": "Send notifications to Rocket.Chat channels",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": true,
+        "label": "Server Host",
+        "placeholder": "rocket.example.com"
+      },
+      {
+        "name": "user_id",
+        "type": "string",
+        "required": true,
+        "label": "User ID"
+      },
+      {
+        "name": "token",
+        "type": "password",
+        "required": true,
+        "label": "Auth Token"
+      },
+      {
+        "name": "channel",
+        "type": "string",
+        "required": true,
+        "label": "Channel",
+        "placeholder": "#general or @username"
+      }
+    ],
+    "url_pattern": "rocket://{user_id}/{token}@{host}/{channel}"
+  },
+  "zulip": {
+    "label": "Zulip",
+    "icon": "zulip",
+    "category": "chat",
+    "description": "Send notifications to Zulip streams",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": true,
+        "label": "Zulip Host",
+        "placeholder": "your-org.zulipchat.com"
+      },
+      {
+        "name": "bot_email",
+        "type": "email",
+        "required": true,
+        "label": "Bot Email",
+        "placeholder": "bot@your-org.zulipchat.com"
+      },
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "stream",
+        "type": "string",
+        "required": true,
+        "label": "Stream",
+        "placeholder": "general"
+      }
+    ],
+    "url_pattern": "zulip://{bot_email}:{api_key}@{host}/{stream}"
+  },
+  "googlechat": {
+    "label": "Google Chat",
+    "icon": "googlechat",
+    "category": "chat",
+    "description": "Send notifications to Google Chat spaces",
+    "fields": [
+      {
+        "name": "webhook_url",
+        "type": "url",
+        "required": true,
+        "label": "Webhook URL",
+        "placeholder": "https://chat.googleapis.com/v1/spaces/...",
+        "help_text": "Space → Apps & Integrations → Webhooks"
+      }
+    ],
+    "url_pattern": "gchat://{webhook_url}",
+    "url_builder": "extract_gchat_tokens"
+  },
+  "flock": {
+    "label": "Flock",
+    "icon": "flock",
+    "category": "chat",
+    "description": "Send notifications to Flock channels",
+    "fields": [
+      {
+        "name": "token",
+        "type": "password",
+        "required": true,
+        "label": "Webhook Token",
+        "help_text": "From Flock incoming webhook"
+      }
+    ],
+    "url_pattern": "flock://{token}"
+  },
+  "guilded": {
+    "label": "Guilded",
+    "icon": "guilded",
+    "category": "chat",
+    "description": "Send notifications to Guilded channels",
+    "fields": [
+      {
+        "name": "webhook_url",
+        "type": "url",
+        "required": true,
+        "label": "Webhook URL",
+        "placeholder": "https://media.guilded.gg/webhooks/..."
+      }
+    ],
+    "url_pattern": "guilded://{webhook_id}/{webhook_token}",
+    "url_builder": "extract_guilded_tokens"
+  },
+  "revolt": {
+    "label": "Revolt",
+    "icon": "revolt",
+    "category": "chat",
+    "description": "Send notifications to Revolt channels",
+    "fields": [
+      {
+        "name": "bot_token",
+        "type": "password",
+        "required": true,
+        "label": "Bot Token"
+      },
+      {
+        "name": "channel_id",
+        "type": "string",
+        "required": true,
+        "label": "Channel ID"
+      }
+    ],
+    "url_pattern": "revolt://{bot_token}/{channel_id}"
+  },
+  "feishu": {
+    "label": "Feishu",
+    "icon": "feishu",
+    "category": "chat",
+    "description": "Send notifications to Feishu (Lark)",
+    "fields": [
+      {
+        "name": "webhook_url",
+        "type": "url",
+        "required": true,
+        "label": "Webhook URL",
+        "placeholder": "https://open.feishu.cn/open-apis/bot/v2/hook/..."
+      }
+    ],
+    "url_pattern": "feishu://{token}",
+    "url_builder": "extract_feishu_token"
+  },
+  "synology": {
+    "label": "Synology Chat",
+    "icon": "synology",
+    "category": "chat",
+    "description": "Send notifications to Synology Chat",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": true,
+        "label": "Synology Host",
+        "placeholder": "synology.example.com"
+      },
+      {
+        "name": "token",
+        "type": "password",
+        "required": true,
+        "label": "Webhook Token"
+      }
+    ],
+    "url_pattern": "synology://{host}/{token}"
+  },
+  "wecombot": {
+    "label": "WeCom Bot",
+    "icon": "wecom",
+    "category": "chat",
+    "description": "Send notifications via WeCom Bot",
+    "fields": [
+      {
+        "name": "key",
+        "type": "password",
+        "required": true,
+        "label": "Bot Key",
+        "help_text": "From WeCom bot webhook URL"
+      }
+    ],
+    "url_pattern": "wecombot://{key}"
+  },
+  "webex": {
+    "label": "Webex Teams",
+    "icon": "webex",
+    "category": "chat",
+    "description": "Send notifications to Webex Teams",
+    "fields": [
+      {
+        "name": "token",
+        "type": "password",
+        "required": true,
+        "label": "Bot Access Token"
+      },
+      {
+        "name": "room_id",
+        "type": "string",
+        "required": true,
+        "label": "Room ID"
+      }
+    ],
+    "url_pattern": "wxteams://{token}/{room_id}"
+  },
+  "twist": {
+    "label": "Twist",
+    "icon": "twist",
+    "category": "chat",
+    "description": "Send notifications to Twist channels",
+    "fields": [
+      {
+        "name": "email",
+        "type": "email",
+        "required": true,
+        "label": "Email"
+      },
+      {
+        "name": "password",
+        "type": "password",
+        "required": true,
+        "label": "Password"
+      },
+      {
+        "name": "channel_id",
+        "type": "string",
+        "required": true,
+        "label": "Channel ID"
+      }
+    ],
+    "url_pattern": "twist://{email}:{password}@{channel_id}"
+  },
+  "ryver": {
+    "label": "Ryver",
+    "icon": "ryver",
+    "category": "chat",
+    "description": "Send notifications to Ryver",
+    "fields": [
+      {
+        "name": "organization",
+        "type": "string",
+        "required": true,
+        "label": "Organization",
+        "placeholder": "your-org"
+      },
+      {
+        "name": "token",
+        "type": "password",
+        "required": true,
+        "label": "Webhook Token"
+      }
+    ],
+    "url_pattern": "ryver://{organization}/{token}"
+  },
+  "pushover": {
+    "label": "Pushover",
+    "icon": "pushover",
+    "category": "push",
+    "description": "Send push notifications via Pushover",
+    "fields": [
+      {
+        "name": "user_key",
+        "type": "string",
+        "required": true,
+        "label": "User Key",
+        "help_text": "Your Pushover user key"
+      },
+      {
+        "name": "api_token",
+        "type": "password",
+        "required": true,
+        "label": "API Token",
+        "help_text": "Your application API token"
+      }
+    ],
+    "url_pattern": "pover://{user_key}@{api_token}"
+  },
+  "gotify": {
+    "label": "Gotify",
+    "icon": "gotify",
+    "category": "push",
+    "description": "Self-hosted push notifications",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": true,
+        "label": "Gotify Host",
+        "placeholder": "gotify.example.com"
+      },
+      {
+        "name": "token",
+        "type": "password",
+        "required": true,
+        "label": "Application Token"
+      }
+    ],
+    "url_pattern": "gotifys://{host}/{token}"
+  },
+  "ntfy": {
+    "label": "ntfy",
+    "icon": "ntfy",
+    "category": "push",
+    "description": "Simple pub-sub notifications (ntfy.sh)",
+    "fields": [
+      {
+        "name": "topic",
+        "type": "string",
+        "required": true,
+        "label": "Topic",
+        "placeholder": "my-notifications",
+        "help_text": "Your ntfy topic name"
+      },
+      {
+        "name": "host",
+        "type": "string",
+        "required": false,
+        "label": "Host",
+        "placeholder": "ntfy.sh",
+        "default": "ntfy.sh",
+        "help_text": "Default: ntfy.sh (or your self-hosted instance)"
+      }
+    ],
+    "url_pattern": "ntfys://{host}/{topic}"
+  },
+  "pushbullet": {
+    "label": "Pushbullet",
+    "icon": "pushbullet",
+    "category": "push",
+    "description": "Push notifications across devices",
+    "fields": [
+      {
+        "name": "access_token",
+        "type": "password",
+        "required": true,
+        "label": "Access Token",
+        "help_text": "Get from Pushbullet Settings → Access Tokens"
+      },
+      {
+        "name": "device",
+        "type": "string",
+        "required": false,
+        "label": "Device ID",
+        "help_text": "Leave empty to send to all devices"
+      }
+    ],
+    "url_pattern": "pbul://{access_token}/{device}"
+  },
+  "join": {
+    "label": "Join",
+    "icon": "join",
+    "category": "push",
+    "description": "Push notifications via Join by joaoapps",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "device_id",
+        "type": "string",
+        "required": false,
+        "label": "Device ID",
+        "help_text": "Leave empty for all devices"
+      }
+    ],
+    "url_pattern": "join://{api_key}/{device_id}"
+  },
+  "simplepush": {
+    "label": "Simplepush",
+    "icon": "simplepush",
+    "category": "push",
+    "description": "Simple encrypted push notifications",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key",
+        "help_text": "Your Simplepush key"
+      },
+      {
+        "name": "event",
+        "type": "string",
+        "required": false,
+        "label": "Event",
+        "help_text": "Optional event name for filtering"
+      }
+    ],
+    "url_pattern": "spush://{api_key}/{event}"
+  },
+  "pushsafer": {
+    "label": "Pushsafer",
+    "icon": "pushsafer",
+    "category": "push",
+    "description": "Push notifications via Pushsafer",
+    "fields": [
+      {
+        "name": "private_key",
+        "type": "password",
+        "required": true,
+        "label": "Private Key"
+      },
+      {
+        "name": "device",
+        "type": "string",
+        "required": false,
+        "label": "Device ID",
+        "help_text": "Leave empty for all devices"
+      }
+    ],
+    "url_pattern": "psafer://{private_key}/{device}"
+  },
+  "pushy": {
+    "label": "Pushy",
+    "icon": "pushy",
+    "category": "push",
+    "description": "Push notifications via Pushy",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "device_token",
+        "type": "string",
+        "required": true,
+        "label": "Device Token"
+      }
+    ],
+    "url_pattern": "pushy://{api_key}/{device_token}"
+  },
+  "bark": {
+    "label": "Bark",
+    "icon": "bark",
+    "category": "push",
+    "description": "iOS push notifications via Bark",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": true,
+        "label": "Bark Server Host",
+        "placeholder": "api.day.app"
+      },
+      {
+        "name": "device_key",
+        "type": "password",
+        "required": true,
+        "label": "Device Key"
+      }
+    ],
+    "url_pattern": "barks://{host}/{device_key}"
+  },
+  "pushdeer": {
+    "label": "PushDeer",
+    "icon": "pushdeer",
+    "category": "push",
+    "description": "Self-hosted push notifications",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": false,
+        "label": "Host",
+        "placeholder": "api2.pushdeer.com",
+        "default": "api2.pushdeer.com"
+      },
+      {
+        "name": "push_key",
+        "type": "password",
+        "required": true,
+        "label": "Push Key"
+      }
+    ],
+    "url_pattern": "pushdeer://{host}/{push_key}"
+  },
+  "techulus": {
+    "label": "Techulus Push",
+    "icon": "techulus",
+    "category": "push",
+    "description": "Push notifications via Techulus",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      }
+    ],
+    "url_pattern": "push://{api_key}"
+  },
+  "notica": {
+    "label": "Notica",
+    "icon": "notica",
+    "category": "push",
+    "description": "Browser push notifications via Notica",
+    "fields": [
+      {
+        "name": "token",
+        "type": "string",
+        "required": true,
+        "label": "Token",
+        "help_text": "Your Notica.us token"
+      }
+    ],
+    "url_pattern": "notica://{token}"
+  },
+  "chanify": {
+    "label": "Chanify",
+    "icon": "chanify",
+    "category": "push",
+    "description": "iOS push notifications via Chanify",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": false,
+        "label": "Host",
+        "placeholder": "api.chanify.net",
+        "default": "api.chanify.net"
+      },
+      {
+        "name": "token",
+        "type": "password",
+        "required": true,
+        "label": "Token"
+      }
+    ],
+    "url_pattern": "chanify://{host}/{token}"
+  },
+  "pushme": {
+    "label": "PushMe",
+    "icon": "pushme",
+    "category": "push",
+    "description": "Push notifications via PushMe",
+    "fields": [
+      {
+        "name": "token",
+        "type": "password",
+        "required": true,
+        "label": "Push Key"
+      }
+    ],
+    "url_pattern": "pushme://{token}"
+  },
+  "prowl": {
+    "label": "Prowl",
+    "icon": "prowl",
+    "category": "push",
+    "description": "iOS push notifications via Prowl",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "provider_key",
+        "type": "password",
+        "required": false,
+        "label": "Provider Key",
+        "help_text": "Optional provider key"
+      }
+    ],
+    "url_pattern": "prowl://{api_key}/{provider_key}"
+  },
+  "email": {
+    "label": "Email (SMTP)",
+    "icon": "email",
+    "category": "email",
+    "description": "Send notifications via email",
+    "fields": [
+      {
+        "name": "smtp_host",
+        "type": "string",
+        "required": true,
+        "label": "SMTP Host",
+        "placeholder": "smtp.gmail.com"
+      },
+      {
+        "name": "smtp_port",
+        "type": "number",
+        "required": false,
+        "label": "SMTP Port",
+        "placeholder": "587",
+        "default": 587
+      },
+      {
+        "name": "username",
+        "type": "string",
+        "required": true,
+        "label": "Username",
+        "placeholder": "your@email.com"
+      },
+      {
+        "name": "password",
+        "type": "password",
+        "required": true,
+        "label": "Password"
+      },
+      {
+        "name": "to_email",
+        "type": "email",
+        "required": true,
+        "label": "Recipient Email",
+        "placeholder": "recipient@example.com"
+      }
+    ],
+    "url_pattern": "mailtos://{username}:{password}@{smtp_host}:{smtp_port}/{to_email}"
+  },
+  "ses": {
+    "label": "AWS SES",
+    "icon": "aws",
+    "category": "email",
+    "description": "Send emails via Amazon SES",
+    "fields": [
+      {
+        "name": "from_email",
+        "type": "email",
+        "required": true,
+        "label": "From Email"
+      },
+      {
+        "name": "access_key_id",
+        "type": "string",
+        "required": true,
+        "label": "Access Key ID"
+      },
+      {
+        "name": "secret_access_key",
+        "type": "password",
+        "required": true,
+        "label": "Secret Access Key"
+      },
+      {
+        "name": "region",
+        "type": "string",
+        "required": true,
+        "label": "Region",
+        "placeholder": "us-east-2"
+      },
+      {
+        "name": "to_email",
+        "type": "email",
+        "required": true,
+        "label": "Recipient Email"
+      }
+    ],
+    "url_pattern": "ses://{from_email}/{access_key_id}/{secret_access_key}/{region}/{to_email}"
+  },
+  "sendgrid": {
+    "label": "SendGrid",
+    "icon": "sendgrid",
+    "category": "email",
+    "description": "Send emails via SendGrid",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "from_email",
+        "type": "email",
+        "required": true,
+        "label": "From Email"
+      },
+      {
+        "name": "to_email",
+        "type": "email",
+        "required": true,
+        "label": "Recipient Email"
+      }
+    ],
+    "url_pattern": "sendgrid://{api_key}/{from_email}/{to_email}"
+  },
+  "mailgun": {
+    "label": "Mailgun",
+    "icon": "mailgun",
+    "category": "email",
+    "description": "Send emails via Mailgun",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "domain",
+        "type": "string",
+        "required": true,
+        "label": "Domain",
+        "placeholder": "mg.example.com"
+      },
+      {
+        "name": "from_email",
+        "type": "email",
+        "required": true,
+        "label": "From Email"
+      },
+      {
+        "name": "to_email",
+        "type": "email",
+        "required": true,
+        "label": "Recipient Email"
+      }
+    ],
+    "url_pattern": "mailgun://{api_key}@{domain}/{from_email}/{to_email}"
+  },
+  "sparkpost": {
+    "label": "SparkPost",
+    "icon": "sparkpost",
+    "category": "email",
+    "description": "Send emails via SparkPost",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "from_email",
+        "type": "email",
+        "required": true,
+        "label": "From Email"
+      },
+      {
+        "name": "to_email",
+        "type": "email",
+        "required": true,
+        "label": "Recipient Email"
+      }
+    ],
+    "url_pattern": "sparkpost://{api_key}/{from_email}/{to_email}"
+  },
+  "smtp2go": {
+    "label": "SMTP2Go",
+    "icon": "smtp2go",
+    "category": "email",
+    "description": "Send emails via SMTP2Go",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "from_email",
+        "type": "email",
+        "required": true,
+        "label": "From Email"
+      },
+      {
+        "name": "to_email",
+        "type": "email",
+        "required": true,
+        "label": "Recipient Email"
+      }
+    ],
+    "url_pattern": "smtp2go://{api_key}/{from_email}/{to_email}"
+  },
+  "resend": {
+    "label": "Resend",
+    "icon": "resend",
+    "category": "email",
+    "description": "Send emails via Resend",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "from_email",
+        "type": "email",
+        "required": true,
+        "label": "From Email"
+      },
+      {
+        "name": "to_email",
+        "type": "email",
+        "required": true,
+        "label": "Recipient Email"
+      }
+    ],
+    "url_pattern": "resend://{api_key}/{from_email}/{to_email}"
+  },
+  "office365": {
+    "label": "Office 365",
+    "icon": "microsoft",
+    "category": "email",
+    "description": "Send emails via Office 365",
+    "fields": [
+      {
+        "name": "tenant_id",
+        "type": "string",
+        "required": true,
+        "label": "Tenant ID"
+      },
+      {
+        "name": "client_id",
+        "type": "string",
+        "required": true,
+        "label": "Client ID"
+      },
+      {
+        "name": "client_secret",
+        "type": "password",
+        "required": true,
+        "label": "Client Secret"
+      },
+      {
+        "name": "from_email",
+        "type": "email",
+        "required": true,
+        "label": "From Email"
+      },
+      {
+        "name": "to_email",
+        "type": "email",
+        "required": true,
+        "label": "Recipient Email"
+      }
+    ],
+    "url_pattern": "o365://{tenant_id}:{client_id}:{client_secret}/{from_email}/{to_email}"
+  },
+  "brevo": {
+    "label": "Brevo",
+    "icon": "brevo",
+    "category": "email",
+    "description": "Send emails via Brevo (Sendinblue)",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "from_email",
+        "type": "email",
+        "required": true,
+        "label": "From Email"
+      },
+      {
+        "name": "to_email",
+        "type": "email",
+        "required": true,
+        "label": "Recipient Email"
+      }
+    ],
+    "url_pattern": "brevo://{api_key}/{from_email}/{to_email}"
+  },
+  "sendpulse": {
+    "label": "SendPulse",
+    "icon": "sendpulse",
+    "category": "email",
+    "description": "Send emails via SendPulse",
+    "fields": [
+      {
+        "name": "client_id",
+        "type": "string",
+        "required": true,
+        "label": "Client ID"
+      },
+      {
+        "name": "client_secret",
+        "type": "password",
+        "required": true,
+        "label": "Client Secret"
+      },
+      {
+        "name": "from_email",
+        "type": "email",
+        "required": true,
+        "label": "From Email"
+      },
+      {
+        "name": "to_email",
+        "type": "email",
+        "required": true,
+        "label": "Recipient Email"
+      }
+    ],
+    "url_pattern": "sendpulse://{client_id}:{client_secret}/{from_email}/{to_email}"
+  },
+  "twilio": {
+    "label": "Twilio SMS",
+    "icon": "twilio",
+    "category": "sms",
+    "description": "Send SMS notifications via Twilio",
+    "fields": [
+      {
+        "name": "account_sid",
+        "type": "string",
+        "required": true,
+        "label": "Account SID",
+        "placeholder": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      {
+        "name": "auth_token",
+        "type": "password",
+        "required": true,
+        "label": "Auth Token"
+      },
+      {
+        "name": "from_phone",
+        "type": "string",
+        "required": true,
+        "label": "From Phone",
+        "placeholder": "+15551234567"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone",
+        "placeholder": "+15557654321"
+      }
+    ],
+    "url_pattern": "twilio://{account_sid}:{auth_token}@{from_phone}/{to_phone}"
+  },
+  "vonage": {
+    "label": "Vonage (Nexmo)",
+    "icon": "vonage",
+    "category": "sms",
+    "description": "Send SMS via Vonage",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "string",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "api_secret",
+        "type": "password",
+        "required": true,
+        "label": "API Secret"
+      },
+      {
+        "name": "from_phone",
+        "type": "string",
+        "required": true,
+        "label": "From Phone"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "nexmo://{api_key}:{api_secret}@{from_phone}/{to_phone}"
+  },
+  "messagebird": {
+    "label": "MessageBird",
+    "icon": "messagebird",
+    "category": "sms",
+    "description": "Send SMS via MessageBird",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "from_phone",
+        "type": "string",
+        "required": true,
+        "label": "From Phone/Name"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "msgbird://{api_key}/{from_phone}/{to_phone}"
+  },
+  "clickatell": {
+    "label": "Clickatell",
+    "icon": "clickatell",
+    "category": "sms",
+    "description": "Send SMS via Clickatell",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "clickatell://{api_key}/{to_phone}"
+  },
+  "sns": {
+    "label": "AWS SNS",
+    "icon": "aws",
+    "category": "sms",
+    "description": "Send SMS via Amazon SNS",
+    "fields": [
+      {
+        "name": "access_key_id",
+        "type": "string",
+        "required": true,
+        "label": "Access Key ID"
+      },
+      {
+        "name": "secret_access_key",
+        "type": "password",
+        "required": true,
+        "label": "Secret Access Key"
+      },
+      {
+        "name": "region",
+        "type": "string",
+        "required": true,
+        "label": "Region",
+        "placeholder": "us-east-2"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "sns://{access_key_id}/{secret_access_key}/{region}/{to_phone}"
+  },
+  "plivo": {
+    "label": "Plivo",
+    "icon": "plivo",
+    "category": "sms",
+    "description": "Send SMS via Plivo",
+    "fields": [
+      {
+        "name": "auth_id",
+        "type": "string",
+        "required": true,
+        "label": "Auth ID"
+      },
+      {
+        "name": "auth_token",
+        "type": "password",
+        "required": true,
+        "label": "Auth Token"
+      },
+      {
+        "name": "from_phone",
+        "type": "string",
+        "required": true,
+        "label": "From Phone"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "plivo://{auth_id}:{auth_token}@{from_phone}/{to_phone}"
+  },
+  "d7networks": {
+    "label": "D7 Networks",
+    "icon": "d7networks",
+    "category": "sms",
+    "description": "Send SMS via D7 Networks",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "from_phone",
+        "type": "string",
+        "required": false,
+        "label": "From Phone/Name"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "d7sms://{api_key}/{from_phone}/{to_phone}"
+  },
+  "bulksms": {
+    "label": "BulkSMS",
+    "icon": "bulksms",
+    "category": "sms",
+    "description": "Send SMS via BulkSMS",
+    "fields": [
+      {
+        "name": "username",
+        "type": "string",
+        "required": true,
+        "label": "Username"
+      },
+      {
+        "name": "password",
+        "type": "password",
+        "required": true,
+        "label": "Password"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "bulksms://{username}:{password}@/{to_phone}"
+  },
+  "clicksend": {
+    "label": "ClickSend",
+    "icon": "clicksend",
+    "category": "sms",
+    "description": "Send SMS via ClickSend",
+    "fields": [
+      {
+        "name": "username",
+        "type": "string",
+        "required": true,
+        "label": "Username"
+      },
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "clicksend://{username}:{api_key}@/{to_phone}"
+  },
+  "sinch": {
+    "label": "Sinch",
+    "icon": "sinch",
+    "category": "sms",
+    "description": "Send SMS via Sinch",
+    "fields": [
+      {
+        "name": "service_plan_id",
+        "type": "string",
+        "required": true,
+        "label": "Service Plan ID"
+      },
+      {
+        "name": "api_token",
+        "type": "password",
+        "required": true,
+        "label": "API Token"
+      },
+      {
+        "name": "from_phone",
+        "type": "string",
+        "required": true,
+        "label": "From Phone"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "sinch://{service_plan_id}:{api_token}@{from_phone}/{to_phone}"
+  },
+  "seven": {
+    "label": "Seven",
+    "icon": "seven",
+    "category": "sms",
+    "description": "Send SMS via Seven.io",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "seven://{api_key}/{to_phone}"
+  },
+  "msg91": {
+    "label": "MSG91",
+    "icon": "msg91",
+    "category": "sms",
+    "description": "Send SMS via MSG91",
+    "fields": [
+      {
+        "name": "auth_key",
+        "type": "password",
+        "required": true,
+        "label": "Auth Key"
+      },
+      {
+        "name": "sender_id",
+        "type": "string",
+        "required": true,
+        "label": "Sender ID"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "msg91://{auth_key}/{sender_id}/{to_phone}"
+  },
+  "bulkvs": {
+    "label": "BulkVS",
+    "icon": "bulkvs",
+    "category": "sms",
+    "description": "Send SMS via BulkVS",
+    "fields": [
+      {
+        "name": "username",
+        "type": "string",
+        "required": true,
+        "label": "Username"
+      },
+      {
+        "name": "password",
+        "type": "password",
+        "required": true,
+        "label": "Password"
+      },
+      {
+        "name": "from_phone",
+        "type": "string",
+        "required": true,
+        "label": "From Phone"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "bulkvs://{username}:{password}@{from_phone}/{to_phone}"
+  },
+  "burstsms": {
+    "label": "Burst SMS",
+    "icon": "burstsms",
+    "category": "sms",
+    "description": "Send SMS via Burst SMS",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "string",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "api_secret",
+        "type": "password",
+        "required": true,
+        "label": "API Secret"
+      },
+      {
+        "name": "from_phone",
+        "type": "string",
+        "required": true,
+        "label": "From Phone"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "burstsms://{api_key}:{api_secret}@{from_phone}/{to_phone}"
+  },
+  "httpsms": {
+    "label": "httpSMS",
+    "icon": "httpsms",
+    "category": "sms",
+    "description": "Send SMS via httpSMS",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "from_phone",
+        "type": "string",
+        "required": true,
+        "label": "From Phone"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "httpsms://{api_key}@{from_phone}/{to_phone}"
+  },
+  "pagerduty": {
+    "label": "PagerDuty",
+    "icon": "pagerduty",
+    "category": "devops",
+    "description": "Send alerts to PagerDuty",
+    "fields": [
+      {
+        "name": "integration_key",
+        "type": "password",
+        "required": true,
+        "label": "Integration Key",
+        "help_text": "Events API v2 integration key"
+      },
+      {
+        "name": "severity",
+        "type": "select",
+        "required": false,
+        "label": "Severity",
+        "options": ["critical", "error", "warning", "info"],
+        "default": "error"
+      }
+    ],
+    "url_pattern": "pagerduty://{integration_key}/?severity={severity}"
+  },
+  "opsgenie": {
+    "label": "Opsgenie",
+    "icon": "opsgenie",
+    "category": "devops",
+    "description": "Send alerts to Opsgenie",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "priority",
+        "type": "select",
+        "required": false,
+        "label": "Priority",
+        "options": ["P1", "P2", "P3", "P4", "P5"],
+        "default": "P3"
+      }
+    ],
+    "url_pattern": "opsgenie://{api_key}/?priority={priority}"
+  },
+  "splunk": {
+    "label": "Splunk On-Call",
+    "icon": "splunk",
+    "category": "devops",
+    "description": "Send alerts to Splunk On-Call (VictorOps)",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      },
+      {
+        "name": "routing_key",
+        "type": "string",
+        "required": true,
+        "label": "Routing Key"
+      }
+    ],
+    "url_pattern": "splunk://{api_key}/{routing_key}"
+  },
+  "signl4": {
+    "label": "SIGNL4",
+    "icon": "signl4",
+    "category": "devops",
+    "description": "Send alerts to SIGNL4",
+    "fields": [
+      {
+        "name": "team_secret",
+        "type": "password",
+        "required": true,
+        "label": "Team Secret"
+      }
+    ],
+    "url_pattern": "signl4://{team_secret}"
+  },
+  "pagertree": {
+    "label": "PagerTree",
+    "icon": "pagertree",
+    "category": "devops",
+    "description": "Send alerts to PagerTree",
+    "fields": [
+      {
+        "name": "integration_id",
+        "type": "string",
+        "required": true,
+        "label": "Integration ID"
+      }
+    ],
+    "url_pattern": "pagertree://{integration_id}"
+  },
+  "notifiarr": {
+    "label": "Notifiarr",
+    "icon": "notifiarr",
+    "category": "devops",
+    "description": "Send notifications to Notifiarr",
+    "fields": [
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      }
+    ],
+    "url_pattern": "notifiarr://{api_key}"
+  },
+  "jira": {
+    "label": "Jira",
+    "icon": "jira",
+    "category": "devops",
+    "description": "Create Jira issues",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": true,
+        "label": "Jira Host",
+        "placeholder": "your-domain.atlassian.net"
+      },
+      {
+        "name": "email",
+        "type": "email",
+        "required": true,
+        "label": "Email"
+      },
+      {
+        "name": "api_token",
+        "type": "password",
+        "required": true,
+        "label": "API Token"
+      },
+      {
+        "name": "project_key",
+        "type": "string",
+        "required": true,
+        "label": "Project Key",
+        "placeholder": "PROJ"
+      }
+    ],
+    "url_pattern": "jira://{email}:{api_token}@{host}/{project_key}"
+  },
+  "rsyslog": {
+    "label": "RSyslog",
+    "icon": "syslog",
+    "category": "devops",
+    "description": "Send to remote syslog server",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": true,
+        "label": "Syslog Host"
+      },
+      {
+        "name": "port",
+        "type": "number",
+        "required": false,
+        "label": "Port",
+        "default": 514
+      },
+      {
+        "name": "facility",
+        "type": "select",
+        "required": false,
+        "label": "Facility",
+        "options": ["user", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7"],
+        "default": "user"
+      }
+    ],
+    "url_pattern": "rsyslog://{host}:{port}/?facility={facility}"
+  },
+  "twitter": {
+    "label": "X (Twitter)",
+    "icon": "twitter",
+    "category": "social",
+    "description": "Post to X (Twitter)",
+    "fields": [
+      {
+        "name": "consumer_key",
+        "type": "string",
+        "required": true,
+        "label": "Consumer Key"
+      },
+      {
+        "name": "consumer_secret",
+        "type": "password",
+        "required": true,
+        "label": "Consumer Secret"
+      },
+      {
+        "name": "access_token",
+        "type": "string",
+        "required": true,
+        "label": "Access Token"
+      },
+      {
+        "name": "access_secret",
+        "type": "password",
+        "required": true,
+        "label": "Access Secret"
+      }
+    ],
+    "url_pattern": "twitter://{consumer_key}/{consumer_secret}/{access_token}/{access_secret}"
+  },
+  "mastodon": {
+    "label": "Mastodon",
+    "icon": "mastodon",
+    "category": "social",
+    "description": "Post to Mastodon",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": true,
+        "label": "Instance Host",
+        "placeholder": "mastodon.social"
+      },
+      {
+        "name": "access_token",
+        "type": "password",
+        "required": true,
+        "label": "Access Token"
+      }
+    ],
+    "url_pattern": "mastodons://{access_token}@{host}"
+  },
+  "reddit": {
+    "label": "Reddit",
+    "icon": "reddit",
+    "category": "social",
+    "description": "Post to Reddit",
+    "fields": [
+      {
+        "name": "client_id",
+        "type": "string",
+        "required": true,
+        "label": "Client ID"
+      },
+      {
+        "name": "client_secret",
+        "type": "password",
+        "required": true,
+        "label": "Client Secret"
+      },
+      {
+        "name": "username",
+        "type": "string",
+        "required": true,
+        "label": "Username"
+      },
+      {
+        "name": "password",
+        "type": "password",
+        "required": true,
+        "label": "Password"
+      },
+      {
+        "name": "subreddit",
+        "type": "string",
+        "required": true,
+        "label": "Subreddit"
+      }
+    ],
+    "url_pattern": "reddit://{client_id}/{client_secret}/{username}/{password}/{subreddit}"
+  },
+  "bluesky": {
+    "label": "BlueSky",
+    "icon": "bluesky",
+    "category": "social",
+    "description": "Post to BlueSky",
+    "fields": [
+      {
+        "name": "handle",
+        "type": "string",
+        "required": true,
+        "label": "Handle",
+        "placeholder": "user.bsky.social"
+      },
+      {
+        "name": "app_password",
+        "type": "password",
+        "required": true,
+        "label": "App Password",
+        "help_text": "Create at Settings → App Passwords"
+      }
+    ],
+    "url_pattern": "bsky://{handle}/{app_password}"
+  },
+  "whatsapp": {
+    "label": "WhatsApp",
+    "icon": "whatsapp",
+    "category": "social",
+    "description": "Send WhatsApp messages via Twilio",
+    "fields": [
+      {
+        "name": "account_sid",
+        "type": "string",
+        "required": true,
+        "label": "Account SID"
+      },
+      {
+        "name": "auth_token",
+        "type": "password",
+        "required": true,
+        "label": "Auth Token"
+      },
+      {
+        "name": "from_phone",
+        "type": "string",
+        "required": true,
+        "label": "From Phone",
+        "help_text": "Twilio WhatsApp number"
+      },
+      {
+        "name": "to_phone",
+        "type": "string",
+        "required": true,
+        "label": "To Phone"
+      }
+    ],
+    "url_pattern": "whatsapp://{account_sid}:{auth_token}@{from_phone}/{to_phone}"
+  },
+  "line": {
+    "label": "LINE",
+    "icon": "line",
+    "category": "social",
+    "description": "Send LINE notifications",
+    "fields": [
+      {
+        "name": "access_token",
+        "type": "password",
+        "required": true,
+        "label": "Channel Access Token"
+      },
+      {
+        "name": "user_id",
+        "type": "string",
+        "required": true,
+        "label": "User/Group ID"
+      }
+    ],
+    "url_pattern": "line://{access_token}/{user_id}"
+  },
+  "json": {
+    "label": "Webhook (JSON)",
+    "icon": "webhook",
+    "category": "webhook",
+    "description": "Send JSON payload to any HTTP endpoint",
+    "fields": [
+      {
+        "name": "url",
+        "type": "url",
+        "required": true,
+        "label": "Webhook URL",
+        "placeholder": "https://your-api.com/webhook"
+      }
+    ],
+    "url_pattern": "json://{url}",
+    "url_builder": "strip_protocol"
+  },
+  "xml": {
+    "label": "Webhook (XML)",
+    "icon": "webhook",
+    "category": "webhook",
+    "description": "Send XML payload to any HTTP endpoint",
+    "fields": [
+      {
+        "name": "url",
+        "type": "url",
+        "required": true,
+        "label": "Webhook URL",
+        "placeholder": "https://your-api.com/webhook"
+      }
+    ],
+    "url_pattern": "xml://{url}",
+    "url_builder": "strip_protocol"
+  },
+  "form": {
+    "label": "Webhook (Form)",
+    "icon": "webhook",
+    "category": "webhook",
+    "description": "Send form data to any HTTP endpoint",
+    "fields": [
+      {
+        "name": "url",
+        "type": "url",
+        "required": true,
+        "label": "Webhook URL",
+        "placeholder": "https://your-api.com/webhook"
+      }
+    ],
+    "url_pattern": "form://{url}",
+    "url_builder": "strip_protocol"
+  },
+  "homeassistant": {
+    "label": "Home Assistant",
+    "icon": "homeassistant",
+    "category": "home",
+    "description": "Send notifications to Home Assistant",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": true,
+        "label": "Home Assistant Host",
+        "placeholder": "homeassistant.local:8123"
+      },
+      {
+        "name": "access_token",
+        "type": "password",
+        "required": true,
+        "label": "Long-Lived Access Token"
+      }
+    ],
+    "url_pattern": "hassio://{host}/{access_token}"
+  },
+  "ifttt": {
+    "label": "IFTTT",
+    "icon": "ifttt",
+    "category": "home",
+    "description": "Trigger IFTTT webhooks",
+    "fields": [
+      {
+        "name": "webhook_key",
+        "type": "password",
+        "required": true,
+        "label": "Webhook Key",
+        "help_text": "From IFTTT Webhooks settings"
+      },
+      {
+        "name": "event",
+        "type": "string",
+        "required": true,
+        "label": "Event Name"
+      }
+    ],
+    "url_pattern": "ifttt://{webhook_key}@{event}"
+  },
+  "kodi": {
+    "label": "KODI",
+    "icon": "kodi",
+    "category": "home",
+    "description": "Send notifications to KODI",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": true,
+        "label": "KODI Host",
+        "placeholder": "192.168.1.100"
+      },
+      {
+        "name": "port",
+        "type": "number",
+        "required": false,
+        "label": "Port",
+        "default": 8080
+      },
+      {
+        "name": "username",
+        "type": "string",
+        "required": false,
+        "label": "Username"
+      },
+      {
+        "name": "password",
+        "type": "password",
+        "required": false,
+        "label": "Password"
+      }
+    ],
+    "url_pattern": "kodi://{username}:{password}@{host}:{port}"
+  },
+  "lametric": {
+    "label": "LaMetric Time",
+    "icon": "lametric",
+    "category": "home",
+    "description": "Send notifications to LaMetric Time",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": true,
+        "label": "Device IP",
+        "placeholder": "192.168.1.100"
+      },
+      {
+        "name": "api_key",
+        "type": "password",
+        "required": true,
+        "label": "API Key"
+      }
+    ],
+    "url_pattern": "lametric://{api_key}@{host}"
+  },
+  "apprise_api": {
+    "label": "Apprise API",
+    "icon": "apprise",
+    "category": "home",
+    "description": "Send via Apprise API server",
+    "fields": [
+      {
+        "name": "host",
+        "type": "string",
+        "required": true,
+        "label": "Apprise API Host",
+        "placeholder": "apprise.example.com"
+      },
+      {
+        "name": "config_key",
+        "type": "string",
+        "required": true,
+        "label": "Config Key"
+      }
+    ],
+    "url_pattern": "apprises://{host}/{config_key}"
+  }
+}

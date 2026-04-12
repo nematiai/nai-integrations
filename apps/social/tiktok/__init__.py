@@ -1,0 +1,1 @@
+"""TikTok social adapter package."""

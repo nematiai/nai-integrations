@@ -1,0 +1,6 @@
+-r base.txt
+
+# Dev / QA
+ruff
+pytest
+pytest-django

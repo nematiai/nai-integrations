@@ -42,3 +42,8 @@ Homepage = "https://github.com/NematiAI/nai-integrations"
 [tool.pytest.ini_options]
 python_files = ["test_*.py", "tests.py", "tests_*.py"]
 DJANGO_SETTINGS_MODULE = "config.test_settings"
+markers = [
+    "unit: fast mocked tests, no external services (run always)",
+    "integration_mocked: integration tests with mocked HTTP (run in CI)",
+    "integration_live: integration tests hitting real vendor APIs (nightly/manual only)",
+]

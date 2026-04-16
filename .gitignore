@@ -34,7 +34,14 @@ coverage.xml
 *.log
 db.sqlite3
 .python-version
+# Environment files — never commit real secrets
 .env
+.env.test
+.env.test.live
+# But DO commit the templates
+!.env.example
+!.env.test.example
+!.env.test.live.example
 .venv
 env/
 venv/

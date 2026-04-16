@@ -78,7 +78,10 @@
       "Bash(DJANGO_SETTINGS_MODULE=config.settings DB_ENGINE=django.db.backends.sqlite3 DB_NAME=:memory: TOKEN_ENCRYPTION_KEY='VGVzdEVuY3J5cHRpb25LZXkxMjM0NTY3ODkwMTI=' python -c \"import django; django.setup\\(\\); from apps.social.urls import router; print\\('routers:', len\\(router._routers\\)\\); from apps.social.tasks import post_to_platform; print\\('task:', post_to_platform.name\\)\")",
       "Bash(DJANGO_SETTINGS_MODULE=config.settings DB_ENGINE=django.db.backends.sqlite3 DB_NAME=:memory: TOKEN_ENCRYPTION_KEY='VGVzdEVuY3J5cHRpb25LZXkxMjM0NTY3ODkwMTI=' python -c \"import django; django.setup\\(\\); from apps.social.urls import router; print\\('OK, routers:', len\\(router._routers\\)\\); from apps.social.tasks import post_to_platform; print\\('task:', post_to_platform.name\\); from apps.core.base.health import get_health_status; print\\('health:', list\\(get_health_status\\(\\).keys\\(\\)\\)\\)\")",
       "Bash(DB_ENGINE=django.db.backends.sqlite3 DB_NAME=:memory: TOKEN_ENCRYPTION_KEY='VGVzdEVuY3J5cHRpb25LZXkxMjM0NTY3ODkwMTI=' python manage.py check)",
-      "Bash(DB_ENGINE=django.db.backends.sqlite3 DB_NAME=:memory: TOKEN_ENCRYPTION_KEY='VGVzdEVuY3J5cHRpb25LZXkxMjM0NTY3ODkwMTI=' python manage.py makemigrations --check --dry-run)"
+      "Bash(DB_ENGINE=django.db.backends.sqlite3 DB_NAME=:memory: TOKEN_ENCRYPTION_KEY='VGVzdEVuY3J5cHRpb25LZXkxMjM0NTY3ODkwMTI=' python manage.py makemigrations --check --dry-run)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(NEMI_TEST_ENV=mocked pytest)",
+      "Bash(NEMI_TEST_ENV=live pytest)"
     ]
   }
 }

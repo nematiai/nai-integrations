@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "nai-integrations"
 version = "0.1.2"
-description = "Cloud storage integrations for Django (Box, Dropbox, Google Drive, OneDrive)"
+description = "NEMI — Nemati Integration Hub (Django service)"
 readme = "README.md"
 license = "MIT"
 authors = [
@@ -38,12 +38,6 @@ all = [
 
 [project.urls]
 Homepage = "https://github.com/NematiAI/nai-integrations"
-
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.setuptools.package-data]
-"*" = ["templates/**/*.html", "migrations/*.py"]
 
 [tool.pytest.ini_options]
 python_files = ["test_*.py", "tests.py", "tests_*.py"]

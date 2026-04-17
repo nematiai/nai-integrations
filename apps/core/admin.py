@@ -1,8 +1,8 @@
 """Django admin registration for core models."""
 
-from django.contrib import admin
+from django.contrib import admin, messages
 
-from .auth.models import AppClient
+from .auth.models import AppClient, _generate_api_key, _hash_key
 
 try:
     from unfold.admin import ModelAdmin as BaseModelAdmin
@@ -43,5 +43,16 @@ class AppClientAdmin(BaseModelAdmin):
         ),
     )
 
-    def has_add_permission(self, _request) -> bool:
-        return False
+    def save_model(self, request, obj, form, change) -> None:
+        if not change:
+            raw_key = _generate_api_key()
+            obj.api_key_hash = _hash_key(raw_key)
+            obj.api_key_prefix = raw_key[:8]
+            super().save_model(request, obj, form, change)
+            messages.success(
+                request,
+                f"API key for '{obj.name}': {raw_key}  — "
+                "copy it now, it will not be shown again.",
+            )
+        else:
+            super().save_model(request, obj, form, change)

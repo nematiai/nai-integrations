@@ -23,5 +23,8 @@ apprise==1.9.7
 # Security
 cryptography>=41.0
 
+# Static files
+whitenoise>=6.5
+
 # Database
 psycopg2-binary>=2.9

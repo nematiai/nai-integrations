@@ -11,6 +11,7 @@ api = NinjaAPI(
     title="NEMI — Nemati Integration Hub",
     version="1.0.0",
     urls_namespace="api",
+    docs_url="/v1/docs/",
 )
 
 # Auth endpoints

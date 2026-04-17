@@ -19,7 +19,7 @@ EXEMPT_PATHS = (
     "/admin/",
     "/api/v1/health/",
     "/api/v1/auth/register",
-    "/api/docs",
+    "/api/v1/docs",
     "/api/openapi.json",
 )
 

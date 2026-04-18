@@ -14,14 +14,14 @@
 - Entry point: manage.py / config.wsgi
 - Celery app: config.celery
 - Package root: /app (PYTHONPATH)
-- Local URL: http://localhost:8010
+- Local URL: http://localhost:8012
 - Production URL: https://buildmyapp.us
 - Health check: GET /api/v1/health/
 - Admin panel: Django Unfold at /admin/
 - API docs: Django Ninja auto-docs at /api/docs
 
 ## Environments
-- local:  docker/local/  → port 8010
+- local:  docker/local/  → port 8012
 - dev:    docker/development/ → port 8010
 - prod:   docker/production/  → port 8000
 - env files: .env (local), .env.dev, .env.prod
@@ -85,7 +85,7 @@ ruff check . && ruff format --check .
 
 ## Docker Services
 ```yaml
-nemi-api:     # Django + Gunicorn, port 8010
+nemi-api:     # Django + Gunicorn, port 8012
 nemi-worker:  # Celery worker
 nemi-beat:    # Celery beat (scheduled tasks)
 nemi-db:      # PostgreSQL 16

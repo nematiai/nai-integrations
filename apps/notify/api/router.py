@@ -71,7 +71,7 @@ def create_channel(request, payload: ChannelCreateSchema):
     if errors:
         return 400, {"detail": {"config": errors}}
     ch = NotificationChannel.objects.create(
-        created_by=getattr(request, "user", None),
+        created_by=None,
         name=payload.name,
         service_type=payload.service_type,
         config=payload.config,

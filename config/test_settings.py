@@ -42,7 +42,8 @@ DATABASES = {
 
 TOKEN_ENCRYPTION_KEY = "VGVzdEVuY3J5cHRpb25LZXkxMjM0NTY3ODkwMTI="
 REDIS_URL = "redis://localhost:6379/0"
-CELERY_TASK_ALWAYS_EAGER = False
+CELERY_TASK_ALWAYS_EAGER = True
+CELERY_TASK_EAGER_PROPAGATES = False
 CELERY_BROKER_URL = "memory://"
 DEBUG = False
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"

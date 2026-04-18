@@ -56,6 +56,10 @@
 - All social adapters must extend BaseSocialAdapter
 - All storage adapters must extend BaseCloudService
 - Each adapter in its own folder with adapter.py + tests.py
+-   Write a plan to docs/plans/2026-0x-0x-[task-name].md covering:
+  - What we are building
+  - Phases with clear deliverables
+  - Files to create or modify per phase
 
 ## Auth
 - External apps (NAI, IndoxHub, Vesper): API key via X-API-Key header

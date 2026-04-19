@@ -5,7 +5,7 @@
 - Domain: buildmyapp.us
 - Model: Open source core + API key gated access
 - License: BSL 1.1 (Business Source License) — free to use and self-host, cannot sell as competing hosted service without commercial license
-- Repo: github.com/NematiAI/nemi (public, open source)
+- Repo: github.com/nematiai/nai-integrations
 - Internal users: NAI, IndoxHub, Vesper (Nemati ecosystem)
 - External users: Anyone via API key from buildmyapp.us
 
@@ -22,7 +22,6 @@
 
 ## Environments
 - local:  docker/local/  → port 8012
-- dev:    docker/development/ → port 8010
 - prod:   docker/production/  → port 8000
 - env files: .env (local), .env.dev, .env.prod
 
@@ -33,7 +32,7 @@
 - apps/core/base/     → exceptions.py, health.py
 - apps/social/        → social media posting adapters
 - apps/social/base/   → BaseSocialAdapter, SocialAccount, PostLog models
-- apps/social/{platform}/ → telegram/, reddit/, discord/, bluesky/, mastodon/
+- apps/social/{platform}/ → 20 platforms: bluesky/, discord/, dribbble/, facebook/, google_business/, instagram/, linkedin/, linkedin_page/, mastodon/, mewe/, pinterest/, reddit/, skool/, slack/, telegram/, threads/, tiktok/, whop/, x/, youtube/
 - apps/storage/       → cloud storage adapters (migrated from nai-integrations)
 - apps/storage/base/  → BaseCloudAuth, BaseCloudService, schemas, admin
 - apps/storage/{provider}/ → box/, dropbox/, google/, onedrive/

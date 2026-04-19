@@ -1,0 +1,154 @@
+networks:
+  nemi_internal:
+    driver: bridge
+    internal: true
+  nai_public:
+    external: true
+
+volumes:
+  postgres_data:
+  redis_data:
+
+services:
+  nemi-api:
+    image: ghcr.io/nematiai/nai-integrations:${GIT_SHA:-latest}
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      args:
+        GIT_SHA: ${GIT_SHA}
+    restart: always
+    env_file:
+      - ../../.env.prod
+    environment:
+      - DEBUG=False
+      - DJANGO_SETTINGS_MODULE=config.settings
+    expose:
+      - "8000"
+    networks:
+      - nemi_internal
+      - nai_public
+    depends_on:
+      nemi-db:
+        condition: service_healthy
+      nemi-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    mem_limit: 512m
+    cpus: 0.5
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  nemi-worker:
+    image: ghcr.io/nematiai/nai-integrations:${GIT_SHA:-latest}
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      args:
+        GIT_SHA: ${GIT_SHA}
+    command: celery -A config worker -l info
+    restart: always
+    env_file:
+      - ../../.env.prod
+    environment:
+      - DEBUG=False
+      - DJANGO_SETTINGS_MODULE=config.settings
+    networks:
+      - nemi_internal
+    depends_on:
+      nemi-db:
+        condition: service_healthy
+      nemi-redis:
+        condition: service_healthy
+    mem_limit: 512m
+    cpus: 0.5
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  nemi-beat:
+    image: ghcr.io/nematiai/nai-integrations:${GIT_SHA:-latest}
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+      args:
+        GIT_SHA: ${GIT_SHA}
+    command: celery -A config beat -l info
+    restart: always
+    env_file:
+      - ../../.env.prod
+    environment:
+      - DEBUG=False
+      - DJANGO_SETTINGS_MODULE=config.settings
+    networks:
+      - nemi_internal
+    depends_on:
+      nemi-db:
+        condition: service_healthy
+      nemi-redis:
+        condition: service_healthy
+    mem_limit: 256m
+    cpus: 0.25
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  nemi-db:
+    image: postgres:16.4-alpine
+    restart: always
+    env_file:
+      - ../../.env.prod
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - nemi_internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    mem_limit: 1g
+    cpus: 1.0
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  nemi-redis:
+    image: redis:7.2-alpine
+    restart: always
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - nemi_internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    mem_limit: 256m
+    cpus: 0.25
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"

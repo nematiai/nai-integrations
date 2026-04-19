@@ -5,6 +5,12 @@ services:
       dockerfile: Dockerfile
     container_name: nemi-api-dev
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
     ports:
       - "8012:8000"
     env_file:

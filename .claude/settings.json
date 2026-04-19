@@ -1,9 +1,4 @@
 {
-  "model": "claude-opus-4-6",
-  "effortLevel": "high",
-  "env": {
-    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "80"
-  },
   "permissions": {
     "allow": [
       "Bash(git *)",

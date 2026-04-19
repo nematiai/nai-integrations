@@ -1,0 +1,12 @@
+-r base.txt
+
+# Dev / QA
+ruff
+pytest
+pytest-django
+pytest-cov
+pytest-mock
+
+# HTTP mocking for integration tests
+responses
+respx

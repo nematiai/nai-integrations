@@ -158,12 +158,10 @@ def test_disconnect_when_connected(app_client, api_client, mock_requests):
     assert body["success"] is True
 
 
-# --- TEST 8: disconnect when not connected returns 400 ---
-# Note: Box returns 400 "Box is not connected", while Google returns 404.
-# This inconsistency is tracked as tech debt for Phase 1.2 standardization.
+# --- TEST 8: disconnect when not connected returns 404 ---
 
 
 @box_settings
 def test_disconnect_not_connected_returns_400(api_client):
     resp = api_client.delete("/api/v1/storage/box/disconnect/")
-    assert resp.status_code == 400
+    assert resp.status_code == 404

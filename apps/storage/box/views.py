@@ -76,7 +76,7 @@ def disconnect_box(request: HttpRequest) -> BoxDisconnectOut:
     app_client, user_id = get_storage_context(request)
     service = BoxService(app_client, user_id)
     if not service.is_connected():
-        raise HttpError(400, "Box is not connected")
+        raise HttpError(404, "Box is not connected")
     success = service.disconnect()
     return BoxDisconnectOut(
         success=success,
@@ -93,7 +93,7 @@ def get_box_contents(request: HttpRequest) -> BoxContentsOut:
     offset = int(request.GET.get("offset", "0"))
 
     if not service.is_connected():
-        raise HttpError(400, "Box is not connected")
+        raise HttpError(404, "Box is not connected")
 
     try:
         folder_data = service.list_folder(folder_id, limit, offset)

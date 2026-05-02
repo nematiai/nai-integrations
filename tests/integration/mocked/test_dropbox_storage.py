@@ -162,11 +162,10 @@ def test_disconnect_when_connected(app_client, api_client, mock_requests):
     assert body["success"] is True
 
 
-# --- TEST 8: disconnect when not connected returns 400 ---
-# Note: Dropbox returns 400 (same as Box). Tracked as tech debt D1.
+# --- TEST 8: disconnect when not connected returns 404 ---
 
 
 @dropbox_settings
 def test_disconnect_not_connected_returns_400(api_client):
     resp = api_client.delete("/api/v1/storage/dropbox/disconnect/")
-    assert resp.status_code == 400
+    assert resp.status_code == 404

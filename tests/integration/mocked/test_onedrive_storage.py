@@ -159,11 +159,10 @@ def test_disconnect_when_connected(app_client, api_client):
     assert body["success"] is True
 
 
-# --- TEST 8: disconnect when not connected returns 400 ---
-# Same as Box/Dropbox — tracked as tech debt D1.
+# --- TEST 8: disconnect when not connected returns 404 ---
 
 
 @onedrive_settings
 def test_disconnect_not_connected_returns_400(api_client):
     resp = api_client.delete("/api/v1/storage/onedrive/disconnect/")
-    assert resp.status_code == 400
+    assert resp.status_code == 404

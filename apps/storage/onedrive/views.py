@@ -81,7 +81,7 @@ def disconnect_onedrive(request: HttpRequest) -> OneDriveDisconnectOut:
     app_client, user_id = get_storage_context(request)
     service = OneDriveService(app_client, user_id)
     if not service.is_connected():
-        raise HttpError(400, "OneDrive is not connected")
+        raise HttpError(404, "OneDrive is not connected")
     success = service.disconnect()
     return OneDriveDisconnectOut(
         success=success,
@@ -97,7 +97,7 @@ def get_onedrive_contents(request: HttpRequest) -> OneDriveContentsOut:
     limit = int(request.GET.get("limit", "100"))
 
     if not service.is_connected():
-        raise HttpError(400, "OneDrive is not connected")
+        raise HttpError(404, "OneDrive is not connected")
 
     try:
         folder_data = service.list_folder(folder_id, limit)

@@ -74,7 +74,7 @@ def disconnect_dropbox(request: HttpRequest) -> DropboxDisconnectOut:
     app_client, user_id = get_storage_context(request)
     service = DropboxService(app_client, user_id)
     if not service.is_connected():
-        raise HttpError(400, "Dropbox is not connected")
+        raise HttpError(404, "Dropbox is not connected")
     success = service.disconnect()
     return DropboxDisconnectOut(
         success=success,
@@ -89,7 +89,7 @@ def get_dropbox_contents(request: HttpRequest) -> DropboxContentsOut:
     path = request.GET.get("path", "")
 
     if not service.is_connected():
-        raise HttpError(400, "Dropbox is not connected")
+        raise HttpError(404, "Dropbox is not connected")
 
     try:
         folder_data = service.list_folder(path)

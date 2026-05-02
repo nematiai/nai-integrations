@@ -47,20 +47,38 @@ class BaseCloudService(ABC):
         return self.auth is not None and self.auth.is_active
 
     def get_connection_status(self) -> Dict[str, Any]:
+        disconnected = {
+            "connected": False,
+            "email": None,
+            "display_name": None,
+            "account_id": None,
+            "connected_at": None,
+            "expires_at": None,
+            "scopes": None,
+        }
         if not self.is_connected():
-            return {
-                "connected": False,
-                "email": None,
-                "display_name": None,
-                "account_id": None,
-                "connected_at": None,
-            }
+            return {**disconnected, "message": "Not connected"}
+        if self.auth.needs_refresh():
+            try:
+                refreshed = self.refresh_access_token()
+            except Exception as e:
+                logger.error(
+                    "%s refresh exception during status: %s",
+                    self.PROVIDER_NAME, e, exc_info=True,
+                )
+                refreshed = False
+            if not refreshed:
+                return {**disconnected, "message": "Token refresh failed"}
+            self._load_auth()
         return {
             "connected": True,
             "email": self.auth.email,
             "display_name": self.auth.display_name,
             "account_id": self.auth.account_id,
             "connected_at": self.auth.connected_at,
+            "expires_at": self.auth.expires_at,
+            "scopes": self.auth.scopes,
+            "message": "Connected",
         }
 
     @abstractmethod

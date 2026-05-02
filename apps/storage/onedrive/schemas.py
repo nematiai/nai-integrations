@@ -12,6 +12,9 @@ class OneDriveStatusOut(Schema):
     display_name: Optional[str] = None
     account_id: Optional[str] = None
     connected_at: Optional[datetime] = None
+    expires_at: Optional[datetime] = None
+    scopes: Optional[List[str]] = None
+    message: Optional[str] = None
 
 
 class OneDriveAuthorizeOut(Schema):

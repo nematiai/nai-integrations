@@ -26,25 +26,7 @@ router = Router(tags=["Google Drive Integration"])
 def check_google_connection(request: HttpRequest) -> GoogleStatusOut:
     app_client, user_id = get_storage_context(request)
     service = GoogleDriveService(app_client, user_id)
-
-    if not service.is_connected():
-        return GoogleStatusOut(connected=False, message="Not connected")
-
-    if service.auth.needs_refresh():
-        if not service.refresh_access_token():
-            return GoogleStatusOut(connected=False, message="Token refresh failed")
-        service._load_auth()
-
-    return GoogleStatusOut(
-        connected=True,
-        email=service.auth.email,
-        display_name=service.auth.display_name,
-        account_id=service.auth.account_id,
-        connected_at=service.auth.connected_at,
-        expires_at=service.auth.expires_at,
-        scopes=service.auth.scopes,
-        message="Connected",
-    )
+    return GoogleStatusOut(**service.get_connection_status())
 
 
 @router.post("/authorize/", response=GoogleAuthorizeOut)

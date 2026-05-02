@@ -64,21 +64,54 @@ def test_status_connected_fresh_token(app_client, api_client):
     assert body["email"] == "user@onedrive.example"
 
 
-# --- TEST 3: status when token expired but is_active=True ---
-# Note: OneDrive status view delegates to base get_connection_status()
-# which does NOT auto-refresh. Tracked as tech debt D2.
+# --- TEST 3a: status when token expired, refresh succeeds ---
 
 
 @onedrive_settings
-def test_status_expired_token_still_connected(app_client, api_client):
+def test_status_token_refresh_succeeds(app_client, api_client, mock_requests):
     app, _ = app_client
     auth = _make_onedrive_auth(app, expires_in_hours=0)
     auth.expires_at = timezone.now() - timedelta(minutes=1)
     auth.save()
 
+    mock_requests.add(
+        "POST", TOKEN_URL,
+        json={
+            "access_token": "new-ms-access",
+            "expires_in": 3600,
+            "token_type": "Bearer",
+        },
+        status=200,
+    )
+
     resp = api_client.get("/api/v1/storage/onedrive/status/")
     assert resp.status_code == 200
-    assert resp.json()["connected"] is True
+    body = resp.json()
+    assert body["connected"] is True
+    assert body["message"] == "Connected"
+
+
+# --- TEST 3b: status when token expired, refresh fails ---
+
+
+@onedrive_settings
+def test_status_token_refresh_fails(app_client, api_client, mock_requests):
+    app, _ = app_client
+    auth = _make_onedrive_auth(app, expires_in_hours=0)
+    auth.expires_at = timezone.now() - timedelta(minutes=1)
+    auth.save()
+
+    mock_requests.add(
+        "POST", TOKEN_URL,
+        json={"error": "invalid_grant"},
+        status=400,
+    )
+
+    resp = api_client.get("/api/v1/storage/onedrive/status/")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["connected"] is False
+    assert body["message"] == "Token refresh failed"
 
 
 # --- TEST 4: authorize returns Microsoft oauth URL ---

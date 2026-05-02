@@ -62,11 +62,8 @@ def onedrive_callback(request: HttpRequest) -> Dict[str, Any]:
         token_data = service.exchange_code_for_tokens(code, callback_url)
         service.save_tokens(token_data)
         service._load_auth()
-        try:
-            account_info = service.get_account_info()
-            service.save_tokens(token_data, account_info)
-        except Exception:
-            account_info = {}
+        account_info = service.get_account_info()
+        service.save_tokens(token_data, account_info)
         email = account_info.get("userPrincipalName", "") or account_info.get(
             "mail", ""
         )

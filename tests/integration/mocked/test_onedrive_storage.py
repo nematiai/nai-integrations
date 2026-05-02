@@ -166,3 +166,22 @@ def test_disconnect_when_connected(app_client, api_client):
 def test_disconnect_not_connected_returns_400(api_client):
     resp = api_client.delete("/api/v1/storage/onedrive/disconnect/")
     assert resp.status_code == 404
+
+
+# --- TEST 9: callback when get_account_info fails returns 500 ---
+
+
+@onedrive_settings
+def test_callback_account_info_failure_returns_500(api_client, mock_requests):
+    mock_requests.add(
+        "POST", TOKEN_URL,
+        json={"access_token": "x", "refresh_token": "y", "expires_in": 3600},
+        status=200,
+    )
+    mock_requests.add(
+        "GET", ACCOUNT_URL,
+        json={"error": "forbidden"},
+        status=403,
+    )
+    resp = api_client.post("/api/v1/storage/onedrive/callback/?code=x")
+    assert resp.status_code == 500

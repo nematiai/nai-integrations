@@ -56,6 +56,12 @@ NEMI never sees the browser. NAI handles the redirect.
 
 ## buildmyapp.us — Product Roadmap
 
+> **Note on phase numbering**
+>
+> Phases below describe **product maturity** (who can use NEMI).
+> Engineering work-breakdown phases live in NEMI-TRACKING.md and
+> use a different numbering. The two are not equivalent.
+
 ### Phase 1 (now): Internal Use Only
 - API key auth only
 - Keys created via Django admin (Unfold)

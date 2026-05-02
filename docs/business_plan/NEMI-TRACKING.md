@@ -84,6 +84,17 @@ NEMI is a standalone Django microservice that provides unified integrations (soc
 
 ---
 
+> **Note on phase numbering**
+>
+> This document uses **engineering-delivery phase numbers** — what
+> is being built, week by week. These do NOT map 1:1 to the
+> **product-maturity phase numbers** in NEMI-AUTH-AND-ROADMAP.md,
+> which describe who can use the platform (internal → public →
+> paid → marketplace). Both numbering systems are intentional and
+> serve different planning needs. When phases are referenced
+> elsewhere, always specify which axis: "TRACKING Phase 2"
+> (engineering) vs "AUTH-AND-ROADMAP Phase 2" (product).
+
 ## Phase Plan
 
 ### Phase 1.0: Test Infrastructure Cleanup (COMPLETED Apr 17, 2026)

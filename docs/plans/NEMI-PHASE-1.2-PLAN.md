@@ -39,7 +39,7 @@ Every Phase 1.2 task has:
 | D6 | Notify models use Django User FK (violates composite key pattern) | Phase 2 notify redesign |
 | D7 | GitHub remote case mismatch (`NematiAI` → `nematiai`) | Task #16 |
 | D8 | `/contents/` endpoints untested (deferred from Phase 1.1 Task #5) | Phase 1.3 |
-| D9 | Folder typo `docs/bussiness_plan/` → `docs/business_plan/` | Task #18 |
+| D9 | Folder typo `docs/business_plan/` → `docs/business_plan/` | Task #18 |
 
 ### Order of execution
 Small/safe first (Tasks 8-9, 13-18), then prod-critical (Tasks 10-12), then optional hardening (19-22). Live tests (Phase 1.3) last.
@@ -63,7 +63,7 @@ Small/safe first (Tasks 8-9, 13-18), then prod-critical (Tasks 10-12), then opti
 | 15 | Fix OneDrive callback exception swallowing (D3) | XS | Low | Bug fix |
 | 16 | Fix GitHub remote case (D7) | XS | None | Push perf |
 | 17 | Add Django LOGGING config (D5) | S | Low | Prod debugging |
-| 18 | Fix folder typo `bussiness_plan` → `business_plan` (D9) | S | Low | Doc quality |
+| 18 | Fix folder typo `business_plan` → `business_plan` (D9) | S | Low | Doc quality |
 | 19 | *(Optional)* Sentry integration | S | Low | Decide on arrival |
 | 20 | *(Optional)* Rate limiting on public endpoints | M | Low | Decide on arrival |
 | 21 | *(Optional)* Secrets handling audit | S | Low | Decide on arrival |
@@ -90,13 +90,13 @@ echo "=== All NEMI docs ===" && \
 find . -iname "*nemi*" -type f 2>/dev/null | grep -v __pycache__ && \
 echo "" && \
 echo "=== All Phase headings in TRACKING ===" && \
-grep -nE "^## |^### |Phase [0-9]" docs/bussiness_plan/NEMI-TRACKING.md | head -40 && \
+grep -nE "^## |^### |Phase [0-9]" docs/business_plan/NEMI-TRACKING.md | head -40 && \
 echo "" && \
 echo "=== All Phase headings in AUTH-AND-ROADMAP ===" && \
-grep -nE "^## |^### |Phase [0-9]" docs/bussiness_plan/NEMI-AUTH-AND-ROADMAP.md | head -40 && \
+grep -nE "^## |^### |Phase [0-9]" docs/business_plan/NEMI-AUTH-AND-ROADMAP.md | head -40 && \
 echo "" && \
 echo "=== Phase sections in MASTER-DECISIONS if exists ===" && \
-grep -nE "^## |^### |Phase [0-9]" docs/bussiness_plan/NEMI-MASTER-DECISIONS.md 2>/dev/null | head -40
+grep -nE "^## |^### |Phase [0-9]" docs/business_plan/NEMI-MASTER-DECISIONS.md 2>/dev/null | head -40
 ```
 
 **STOP. Human reviews the diff of phase numbering before any edits.**
@@ -109,10 +109,10 @@ grep -nE "^## |^### |Phase [0-9]" docs/bussiness_plan/NEMI-MASTER-DECISIONS.md 2
 
 **Verification:**
 ```bash
-grep -n "Phase " docs/bussiness_plan/NEMI-TRACKING.md | head -20
-grep -n "Phase " docs/bussiness_plan/NEMI-AUTH-AND-ROADMAP.md | head -20
-diff <(grep "^### Phase" docs/bussiness_plan/NEMI-TRACKING.md) \
-     <(grep "^### Phase" docs/bussiness_plan/NEMI-AUTH-AND-ROADMAP.md)
+grep -n "Phase " docs/business_plan/NEMI-TRACKING.md | head -20
+grep -n "Phase " docs/business_plan/NEMI-AUTH-AND-ROADMAP.md | head -20
+diff <(grep "^### Phase" docs/business_plan/NEMI-TRACKING.md) \
+     <(grep "^### Phase" docs/business_plan/NEMI-AUTH-AND-ROADMAP.md)
 ```
 
 **Hard rules:**
@@ -125,7 +125,7 @@ diff <(grep "^### Phase" docs/bussiness_plan/NEMI-TRACKING.md) \
 - Every `Phase X` heading in TRACKING.md matches a `Phase X` heading in AUTH-AND-ROADMAP.md.
 - `diff` command shows no differences in phase-heading lines.
 
-**Rollback:** `git checkout docs/bussiness_plan/NEMI-TRACKING.md`
+**Rollback:** `git checkout docs/business_plan/NEMI-TRACKING.md`
 
 ---
 
@@ -322,7 +322,7 @@ pytest 2>&1 | tail -5
 
 **Steps:**
 
-Create `docs/bussiness_plan/ROLLBACK-PROD.md` containing:
+Create `docs/business_plan/ROLLBACK-PROD.md` containing:
 
 1. **Pre-deploy checklist** (all must be green before touching prod)
    - Current commit on `production` branch is tagged (e.g. `v1.0.0`)
@@ -362,7 +362,7 @@ Create `docs/bussiness_plan/ROLLBACK-PROD.md` containing:
 **Verification:**
 ```bash
 cd /d/NAI_Project/BACKENDS/nai-integrations && \
-wc -l docs/bussiness_plan/ROLLBACK-PROD.md
+wc -l docs/business_plan/ROLLBACK-PROD.md
 # Expected: 80-150 lines, no more. If longer, it's a novel, not a runbook.
 ```
 
@@ -375,7 +375,7 @@ wc -l docs/bussiness_plan/ROLLBACK-PROD.md
 - Document is reviewed by human.
 - Every `TBD` is tracked as a follow-up item.
 
-**Rollback:** `rm docs/bussiness_plan/ROLLBACK-PROD.md`
+**Rollback:** `rm docs/business_plan/ROLLBACK-PROD.md`
 
 ---
 
@@ -725,7 +725,7 @@ pytest 2>&1 | tail -5
 
 ---
 
-## Task #18 — Fix folder typo `bussiness_plan` → `business_plan` (D9)
+## Task #18 — Fix folder typo `business_plan` → `business_plan` (D9)
 
 **Size:** S
 **Rationale:** The folder is misspelled. Every doc reference and import path that mentions it inherits the typo. Fix once now before more things reference it.
@@ -734,16 +734,16 @@ pytest 2>&1 | tail -5
 ```bash
 cd /d/NAI_Project/BACKENDS/nai-integrations && \
 echo "=== Files in misspelled folder ===" && \
-ls docs/bussiness_plan/ && \
+ls docs/business_plan/ && \
 echo "" && \
 echo "=== All references to the typo anywhere in repo ===" && \
-grep -rn "bussiness_plan" . --exclude-dir=.git --exclude-dir=__pycache__ --exclude-dir=.pytest_cache 2>/dev/null | head -20
+grep -rn "business_plan" . --exclude-dir=.git --exclude-dir=__pycache__ --exclude-dir=.pytest_cache 2>/dev/null | head -20
 ```
 
 **Steps:**
 ```bash
 # Rename folder
-git mv docs/bussiness_plan docs/business_plan
+git mv docs/business_plan docs/business_plan
 
 # Update any references in other files (based on pre-flight grep)
 # Use sed or str_replace for each reference
@@ -751,7 +751,7 @@ git mv docs/bussiness_plan docs/business_plan
 
 **Verification:**
 ```bash
-grep -rn "bussiness_plan" . --exclude-dir=.git --exclude-dir=__pycache__ 2>/dev/null
+grep -rn "business_plan" . --exclude-dir=.git --exclude-dir=__pycache__ 2>/dev/null
 # Expected: no output
 
 ls docs/business_plan/   # files should still be there
@@ -763,13 +763,13 @@ ls docs/business_plan/   # files should still be there
 - Do NOT edit file contents beyond the folder path.
 
 **Acceptance:**
-- No file/reference contains `bussiness_plan`.
+- No file/reference contains `business_plan`.
 - `docs/business_plan/` contains all the original files.
 - Full suite: still passing.
 
 **Rollback:**
 ```bash
-git mv docs/business_plan docs/bussiness_plan
+git mv docs/business_plan docs/business_plan
 # (and revert any other file changes)
 ```
 

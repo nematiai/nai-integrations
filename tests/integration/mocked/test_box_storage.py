@@ -76,7 +76,8 @@ def test_status_token_refresh_succeeds(app_client, api_client, mock_requests):
     auth.save()
 
     mock_requests.add(
-        "POST", TOKEN_URL,
+        "POST",
+        TOKEN_URL,
         json={
             "access_token": "new-box-access",
             "expires_in": 3600,
@@ -103,7 +104,8 @@ def test_status_token_refresh_fails(app_client, api_client, mock_requests):
     auth.save()
 
     mock_requests.add(
-        "POST", TOKEN_URL,
+        "POST",
+        TOKEN_URL,
         json={"error": "invalid_grant"},
         status=400,
     )
@@ -135,7 +137,8 @@ def test_callback_valid_code_creates_auth(app_client, api_client, mock_requests)
     app, _ = app_client
 
     mock_requests.add(
-        "POST", TOKEN_URL,
+        "POST",
+        TOKEN_URL,
         json={
             "access_token": "real-box-access",
             "refresh_token": "real-box-refresh",
@@ -145,7 +148,8 @@ def test_callback_valid_code_creates_auth(app_client, api_client, mock_requests)
         status=200,
     )
     mock_requests.add(
-        "GET", USERINFO_URL,
+        "GET",
+        USERINFO_URL,
         json={
             "id": "box-user-real-001",
             "login": "real@box.example",
@@ -154,15 +158,14 @@ def test_callback_valid_code_creates_auth(app_client, api_client, mock_requests)
         status=200,
     )
 
-    resp = api_client.post(
-        "/api/v1/storage/box/callback/?code=valid-auth-code"
-    )
+    resp = api_client.post("/api/v1/storage/box/callback/?code=valid-auth-code")
     assert resp.status_code == 200
     body = resp.json()
     assert body["success"] is True
     assert body["email"] == "real@box.example"
     assert BoxAuth.objects.filter(
-        app_client=app, email="real@box.example",
+        app_client=app,
+        email="real@box.example",
     ).exists()
 
 

@@ -64,7 +64,9 @@ class BaseCloudService(ABC):
             except Exception as e:
                 logger.error(
                     "%s refresh exception during status: %s",
-                    self.PROVIDER_NAME, e, exc_info=True,
+                    self.PROVIDER_NAME,
+                    e,
+                    exc_info=True,
                 )
                 refreshed = False
             if not refreshed:

@@ -75,7 +75,8 @@ def test_status_token_refresh_succeeds(app_client, api_client, mock_requests):
     auth.save()
 
     mock_requests.add(
-        "POST", TOKEN_URL,
+        "POST",
+        TOKEN_URL,
         json={
             "access_token": "new-ms-access",
             "expires_in": 3600,
@@ -102,7 +103,8 @@ def test_status_token_refresh_fails(app_client, api_client, mock_requests):
     auth.save()
 
     mock_requests.add(
-        "POST", TOKEN_URL,
+        "POST",
+        TOKEN_URL,
         json={"error": "invalid_grant"},
         status=400,
     )
@@ -136,7 +138,8 @@ def test_callback_valid_code_creates_auth(app_client, api_client, mock_requests)
     app, _ = app_client
 
     mock_requests.add(
-        "POST", TOKEN_URL,
+        "POST",
+        TOKEN_URL,
         json={
             "access_token": "real-ms-access",
             "refresh_token": "real-ms-refresh",
@@ -146,7 +149,8 @@ def test_callback_valid_code_creates_auth(app_client, api_client, mock_requests)
         status=200,
     )
     mock_requests.add(
-        "GET", ACCOUNT_URL,
+        "GET",
+        ACCOUNT_URL,
         json={
             "id": "ms-real-001",
             "userPrincipalName": "real@onedrive.example",
@@ -155,15 +159,14 @@ def test_callback_valid_code_creates_auth(app_client, api_client, mock_requests)
         status=200,
     )
 
-    resp = api_client.post(
-        "/api/v1/storage/onedrive/callback/?code=valid-auth-code"
-    )
+    resp = api_client.post("/api/v1/storage/onedrive/callback/?code=valid-auth-code")
     assert resp.status_code == 200
     body = resp.json()
     assert body["success"] is True
     assert body["email"] == "real@onedrive.example"
     assert OneDriveAuth.objects.filter(
-        app_client=app, email="real@onedrive.example",
+        app_client=app,
+        email="real@onedrive.example",
     ).exists()
 
 
@@ -207,12 +210,14 @@ def test_disconnect_not_connected_returns_400(api_client):
 @onedrive_settings
 def test_callback_account_info_failure_returns_500(api_client, mock_requests):
     mock_requests.add(
-        "POST", TOKEN_URL,
+        "POST",
+        TOKEN_URL,
         json={"access_token": "x", "refresh_token": "y", "expires_in": 3600},
         status=200,
     )
     mock_requests.add(
-        "GET", ACCOUNT_URL,
+        "GET",
+        ACCOUNT_URL,
         json={"error": "forbidden"},
         status=403,
     )

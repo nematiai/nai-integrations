@@ -30,19 +30,28 @@ def _make_telegram_account(app_client_obj, user_id="test-user-123"):
 
 
 def _tg_ok(message_id=42):
-    return httpx.Response(200, json={
-        "ok": True,
-        "result": {"message_id": message_id, "chat": {"id": -100111222}},
-    })
+    return httpx.Response(
+        200,
+        json={
+            "ok": True,
+            "result": {"message_id": message_id, "chat": {"id": -100111222}},
+        },
+    )
 
 
 def _tg_error(status=400):
-    return httpx.Response(status, json={
-        "ok": False, "error_code": status, "description": "Bad Request",
-    })
+    return httpx.Response(
+        status,
+        json={
+            "ok": False,
+            "error_code": status,
+            "description": "Bad Request",
+        },
+    )
 
 
 # --- TEST 1: payload validation ---
+
 
 def test_missing_content_returns_422(api_client, post_json):
     resp = post_json(api_client, POST_URL, {"platforms": ["telegram"]})
@@ -51,9 +60,11 @@ def test_missing_content_returns_422(api_client, post_json):
 
 # --- TEST 2: unknown platform ---
 
+
 def test_unknown_platform_creates_failed_log(app_client, api_client, post_json):
     resp = post_json(
-        api_client, POST_URL,
+        api_client,
+        POST_URL,
         {"content": "hi", "platforms": ["not_a_platform"]},
     )
     assert resp.status_code == 200
@@ -66,9 +77,11 @@ def test_unknown_platform_creates_failed_log(app_client, api_client, post_json):
 
 # --- TEST 3: no connected account ---
 
+
 def test_no_account_marks_log_failed(app_client, api_client, post_json):
     resp = post_json(
-        api_client, POST_URL,
+        api_client,
+        POST_URL,
         {"content": "hello", "platforms": ["telegram"]},
     )
     assert resp.status_code == 200
@@ -79,15 +92,20 @@ def test_no_account_marks_log_failed(app_client, api_client, post_json):
 
 # --- TEST 4: happy path ---
 
+
 def test_telegram_success(
-    app_client, api_client, post_json, mock_httpx,
+    app_client,
+    api_client,
+    post_json,
+    mock_httpx,
 ):
     app, _ = app_client
     _make_telegram_account(app)
     mock_httpx.post(TG_SEND_URL).mock(return_value=_tg_ok(42))
 
     resp = post_json(
-        api_client, POST_URL,
+        api_client,
+        POST_URL,
         {"content": "hello world", "platforms": ["telegram"]},
     )
     assert resp.status_code == 200
@@ -99,15 +117,20 @@ def test_telegram_success(
 
 # --- TEST 5: upstream error ---
 
+
 def test_telegram_upstream_error_marks_failed(
-    app_client, api_client, post_json, mock_httpx,
+    app_client,
+    api_client,
+    post_json,
+    mock_httpx,
 ):
     app, _ = app_client
     _make_telegram_account(app)
     mock_httpx.post(TG_SEND_URL).mock(return_value=_tg_error(400))
 
     resp = post_json(
-        api_client, POST_URL,
+        api_client,
+        POST_URL,
         {"content": "bad", "platforms": ["telegram"]},
     )
     assert resp.status_code == 200
@@ -118,21 +141,28 @@ def test_telegram_upstream_error_marks_failed(
 
 # --- TEST 6: multi-platform ---
 
+
 def test_multi_platform_mixed_results(
-    app_client, api_client, post_json, mock_httpx,
+    app_client,
+    api_client,
+    post_json,
+    mock_httpx,
 ):
     app, _ = app_client
     _make_telegram_account(app)
     mock_httpx.post(TG_SEND_URL).mock(return_value=_tg_ok(99))
 
     resp = post_json(
-        api_client, POST_URL,
+        api_client,
+        POST_URL,
         {"content": "ping", "platforms": ["telegram", "not_real"]},
     )
     assert resp.status_code == 200
     assert PostLog.objects.filter(
-        platform="telegram", status="success",
+        platform="telegram",
+        status="success",
     ).exists()
     assert PostLog.objects.filter(
-        platform="not_real", status="failed",
+        platform="not_real",
+        status="failed",
     ).exists()

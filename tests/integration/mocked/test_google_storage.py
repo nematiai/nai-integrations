@@ -77,7 +77,8 @@ def test_status_token_refresh_succeeds(app_client, api_client, mock_requests):
     auth.save()
 
     mock_requests.add(
-        "POST", TOKEN_URL,
+        "POST",
+        TOKEN_URL,
         json={
             "access_token": "new-access-token",
             "expires_in": 3600,
@@ -112,7 +113,8 @@ def test_callback_valid_code_creates_auth(app_client, api_client, mock_requests)
     app, _ = app_client
 
     mock_requests.add(
-        "POST", TOKEN_URL,
+        "POST",
+        TOKEN_URL,
         json={
             "access_token": "real-access-token",
             "refresh_token": "real-refresh-token",
@@ -123,7 +125,8 @@ def test_callback_valid_code_creates_auth(app_client, api_client, mock_requests)
         status=200,
     )
     mock_requests.add(
-        "GET", USERINFO_URL,
+        "GET",
+        USERINFO_URL,
         json={
             "id": "google-user-real-001",
             "email": "real@example.com",
@@ -132,15 +135,14 @@ def test_callback_valid_code_creates_auth(app_client, api_client, mock_requests)
         status=200,
     )
 
-    resp = api_client.post(
-        "/api/v1/storage/google/callback/?code=valid-auth-code"
-    )
+    resp = api_client.post("/api/v1/storage/google/callback/?code=valid-auth-code")
     assert resp.status_code == 200
     body = resp.json()
     assert body["success"] is True
     assert body["email"] == "real@example.com"
     assert GoogleAuth.objects.filter(
-        app_client=app, email="real@example.com",
+        app_client=app,
+        email="real@example.com",
     ).exists()
 
 

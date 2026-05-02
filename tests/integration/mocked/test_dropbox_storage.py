@@ -76,7 +76,8 @@ def test_status_token_refresh_succeeds(app_client, api_client, mock_requests):
     auth.save()
 
     mock_requests.add(
-        "POST", TOKEN_URL,
+        "POST",
+        TOKEN_URL,
         json={
             "access_token": "new-dbx-access",
             "expires_in": 3600,
@@ -103,7 +104,8 @@ def test_status_token_refresh_fails(app_client, api_client, mock_requests):
     auth.save()
 
     mock_requests.add(
-        "POST", TOKEN_URL,
+        "POST",
+        TOKEN_URL,
         json={"error": "invalid_grant"},
         status=400,
     )
@@ -137,7 +139,8 @@ def test_callback_valid_code_creates_auth(app_client, api_client, mock_requests)
     app, _ = app_client
 
     mock_requests.add(
-        "POST", TOKEN_URL,
+        "POST",
+        TOKEN_URL,
         json={
             "access_token": "real-dbx-access",
             "refresh_token": "real-dbx-refresh",
@@ -147,7 +150,8 @@ def test_callback_valid_code_creates_auth(app_client, api_client, mock_requests)
         status=200,
     )
     mock_requests.add(
-        "POST", ACCOUNT_URL,
+        "POST",
+        ACCOUNT_URL,
         json={
             "account_id": "dbid:real-dbx-001",
             "email": "real@dropbox.example",
@@ -156,15 +160,14 @@ def test_callback_valid_code_creates_auth(app_client, api_client, mock_requests)
         status=200,
     )
 
-    resp = api_client.post(
-        "/api/v1/storage/dropbox/callback/?code=valid-auth-code"
-    )
+    resp = api_client.post("/api/v1/storage/dropbox/callback/?code=valid-auth-code")
     assert resp.status_code == 200
     body = resp.json()
     assert body["success"] is True
     assert body["email"] == "real@dropbox.example"
     assert DropboxAuth.objects.filter(
-        app_client=app, email="real@dropbox.example",
+        app_client=app,
+        email="real@dropbox.example",
     ).exists()
 
 

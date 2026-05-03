@@ -5,6 +5,7 @@ import logging
 from django.shortcuts import get_object_or_404
 from ninja import Router
 
+from apps.core.base.rate_limit import rate_limit_anon, rate_limit_user
 from apps.notify.models import NotificationChannel, NotificationLog
 from apps.notify.schemas import get_all_schemas
 from apps.notify.services import NotificationService
@@ -52,6 +53,7 @@ def _log_to_detail(log: NotificationLog) -> LogDetailSchema:
 
 # --- Logs ---
 @router.get("/logs/", response=list[LogListSchema])
+@rate_limit_user
 def list_logs(request, status: str | None = None, channel_id: int | None = None):
     qs = NotificationLog.objects.select_related("channel", "template")
     if status:
@@ -62,6 +64,7 @@ def list_logs(request, status: str | None = None, channel_id: int | None = None)
 
 
 @router.get("/logs/{log_id}/", response={200: LogDetailSchema, 404: ErrorSchema})
+@rate_limit_user
 def get_log(request, log_id: int):
     log = get_object_or_404(
         NotificationLog.objects.select_related("channel", "template"),
@@ -72,12 +75,14 @@ def get_log(request, log_id: int):
 
 # --- Schema & Send ---
 @router.get("/schemas/", response=dict, auth=None)
+@rate_limit_anon
 def get_service_schemas(request):
     """Return all service schemas for frontend form generation."""
     return get_all_schemas()
 
 
 @router.post("/send/", response={201: list[LogListSchema], 400: ErrorSchema})
+@rate_limit_user
 def send_notification(request, payload: SendNotificationSchema):
     """Send an ad-hoc notification to channels."""
     channels = None

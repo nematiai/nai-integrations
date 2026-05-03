@@ -8,6 +8,7 @@ from django.http import HttpRequest
 from ninja import Router
 from ninja.errors import HttpError
 
+from apps.core.base.rate_limit import rate_limit_oauth, rate_limit_user
 from apps.storage.base.helpers import get_storage_context
 
 from .schemas import (
@@ -24,6 +25,7 @@ router = Router(tags=["Dropbox Integration"])
 
 
 @router.get("/status/", response=DropboxStatusOut)
+@rate_limit_user
 def get_dropbox_status(request: HttpRequest) -> DropboxStatusOut:
     app_client, user_id = get_storage_context(request)
     service = DropboxService(app_client, user_id)
@@ -31,6 +33,7 @@ def get_dropbox_status(request: HttpRequest) -> DropboxStatusOut:
 
 
 @router.post("/authorize/", response=DropboxAuthorizeOut)
+@rate_limit_user
 def authorize_dropbox(request: HttpRequest) -> DropboxAuthorizeOut:
     app_client, user_id = get_storage_context(request)
     callback_url = getattr(settings, "DROPBOX_REDIRECT_URI", "")
@@ -45,6 +48,7 @@ def authorize_dropbox(request: HttpRequest) -> DropboxAuthorizeOut:
 
 
 @router.post("/callback/")
+@rate_limit_oauth
 def dropbox_callback(request: HttpRequest) -> Dict[str, Any]:
     """NAI forwards the OAuth code here."""
     app_client, user_id = get_storage_context(request)
@@ -70,6 +74,7 @@ def dropbox_callback(request: HttpRequest) -> Dict[str, Any]:
 
 
 @router.delete("/disconnect/", response=DropboxDisconnectOut)
+@rate_limit_user
 def disconnect_dropbox(request: HttpRequest) -> DropboxDisconnectOut:
     app_client, user_id = get_storage_context(request)
     service = DropboxService(app_client, user_id)
@@ -83,6 +88,7 @@ def disconnect_dropbox(request: HttpRequest) -> DropboxDisconnectOut:
 
 
 @router.get("/contents/", response=DropboxContentsOut)
+@rate_limit_user
 def get_dropbox_contents(request: HttpRequest) -> DropboxContentsOut:
     app_client, user_id = get_storage_context(request)
     service = DropboxService(app_client, user_id)

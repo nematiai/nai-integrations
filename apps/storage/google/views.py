@@ -8,6 +8,7 @@ from django.http import HttpRequest
 from ninja import Router
 from ninja.errors import HttpError
 
+from apps.core.base.rate_limit import rate_limit_oauth, rate_limit_user
 from apps.storage.base.helpers import get_storage_context
 
 from .schemas import (
@@ -23,6 +24,7 @@ router = Router(tags=["Google Drive Integration"])
 
 
 @router.get("/status/", response=GoogleStatusOut)
+@rate_limit_user
 def check_google_connection(request: HttpRequest) -> GoogleStatusOut:
     app_client, user_id = get_storage_context(request)
     service = GoogleDriveService(app_client, user_id)
@@ -30,6 +32,7 @@ def check_google_connection(request: HttpRequest) -> GoogleStatusOut:
 
 
 @router.post("/authorize/", response=GoogleAuthorizeOut)
+@rate_limit_user
 def initiate_google_oauth(request: HttpRequest) -> GoogleAuthorizeOut:
     app_client, user_id = get_storage_context(request)
     redirect_uri = getattr(settings, "GOOGLE_DRIVE_REDIRECT_URI", "")
@@ -45,6 +48,7 @@ def initiate_google_oauth(request: HttpRequest) -> GoogleAuthorizeOut:
 
 
 @router.post("/callback/")
+@rate_limit_oauth
 def google_callback(request: HttpRequest) -> Dict[str, Any]:
     """NAI forwards the OAuth code here."""
     app_client, user_id = get_storage_context(request)
@@ -74,6 +78,7 @@ def google_callback(request: HttpRequest) -> Dict[str, Any]:
 
 
 @router.delete("/disconnect/", response=GoogleDisconnectOut)
+@rate_limit_user
 def disconnect_google(request: HttpRequest) -> GoogleDisconnectOut:
     app_client, user_id = get_storage_context(request)
     service = GoogleDriveService(app_client, user_id)
@@ -88,6 +93,7 @@ def disconnect_google(request: HttpRequest) -> GoogleDisconnectOut:
 
 
 @router.get("/contents/", response=GoogleDriveContentsOut)
+@rate_limit_user
 def list_google_contents(request: HttpRequest) -> GoogleDriveContentsOut:
     app_client, user_id = get_storage_context(request)
     service = GoogleDriveService(app_client, user_id)

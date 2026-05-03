@@ -5,6 +5,7 @@ import logging
 from django.shortcuts import get_object_or_404
 from ninja import Router
 
+from apps.core.base.rate_limit import rate_limit_user
 from apps.notify.models import NotificationChannel
 from apps.notify.schemas import SERVICE_SCHEMAS
 from apps.notify.services import NotificationService
@@ -59,6 +60,7 @@ def _validate_config(service_type: str, config: dict) -> dict | None:
 
 
 @router.get("/channels/", response=list[ChannelListSchema])
+@rate_limit_user
 def list_channels(request):
     return [_channel_to_list(c) for c in NotificationChannel.objects.all()]
 
@@ -66,6 +68,7 @@ def list_channels(request):
 @router.post(
     "/channels/", response={201: ChannelDetailSchema, 400: ValidationErrorSchema}
 )
+@rate_limit_user
 def create_channel(request, payload: ChannelCreateSchema):
     errors = _validate_config(payload.service_type, payload.config)
     if errors:
@@ -81,6 +84,7 @@ def create_channel(request, payload: ChannelCreateSchema):
 
 
 @router.get("/channels/{cid}/", response={200: ChannelDetailSchema, 404: ErrorSchema})
+@rate_limit_user
 def get_channel(request, cid: int):
     return _channel_to_detail(get_object_or_404(NotificationChannel, id=cid))
 
@@ -89,6 +93,7 @@ def get_channel(request, cid: int):
     "/channels/{cid}/",
     response={200: ChannelDetailSchema, 400: ValidationErrorSchema, 404: ErrorSchema},
 )
+@rate_limit_user
 def update_channel(request, cid: int, payload: ChannelUpdateSchema):
     ch = get_object_or_404(NotificationChannel, id=cid)
     errors = _validate_config(payload.service_type, payload.config)
@@ -106,6 +111,7 @@ def update_channel(request, cid: int, payload: ChannelUpdateSchema):
     "/channels/{cid}/",
     response={200: ChannelDetailSchema, 400: ValidationErrorSchema, 404: ErrorSchema},
 )
+@rate_limit_user
 def patch_channel(request, cid: int, payload: ChannelPatchSchema):
     ch = get_object_or_404(NotificationChannel, id=cid)
     if payload.name is not None:
@@ -124,6 +130,7 @@ def patch_channel(request, cid: int, payload: ChannelPatchSchema):
 
 
 @router.delete("/channels/{cid}/", response={204: None, 404: ErrorSchema})
+@rate_limit_user
 def delete_channel(request, cid: int):
     get_object_or_404(NotificationChannel, id=cid).delete()
     return 204, None
@@ -133,6 +140,7 @@ def delete_channel(request, cid: int):
     "/channels/{cid}/test/",
     response={200: TestChannelResponseSchema, 404: ErrorSchema},
 )
+@rate_limit_user
 def test_channel(request, cid: int):
     ch = get_object_or_404(NotificationChannel, id=cid)
     success, message = NotificationService().test_channel(ch)

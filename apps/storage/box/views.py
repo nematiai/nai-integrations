@@ -9,6 +9,7 @@ from django.http import HttpRequest
 from ninja import Router
 from ninja.errors import HttpError
 
+from apps.core.base.rate_limit import rate_limit_oauth, rate_limit_user
 from apps.storage.base.helpers import get_storage_context
 
 from .schemas import (
@@ -25,6 +26,7 @@ router = Router(tags=["Box Integration"])
 
 
 @router.get("/status/", response=BoxStatusOut)
+@rate_limit_user
 def get_box_status(request: HttpRequest) -> BoxStatusOut:
     app_client, user_id = get_storage_context(request)
     service = BoxService(app_client, user_id)
@@ -33,6 +35,7 @@ def get_box_status(request: HttpRequest) -> BoxStatusOut:
 
 
 @router.post("/authorize/", response=BoxAuthorizeOut)
+@rate_limit_user
 def authorize_box(request: HttpRequest) -> BoxAuthorizeOut:
     app_client, user_id = get_storage_context(request)
     callback_url = getattr(settings, "BOX_REDIRECT_URI", "")
@@ -47,6 +50,7 @@ def authorize_box(request: HttpRequest) -> BoxAuthorizeOut:
 
 
 @router.post("/callback/")
+@rate_limit_oauth
 def box_callback(request: HttpRequest) -> Dict[str, Any]:
     """NAI forwards the OAuth code here. No browser involved."""
     app_client, user_id = get_storage_context(request)
@@ -72,6 +76,7 @@ def box_callback(request: HttpRequest) -> Dict[str, Any]:
 
 
 @router.delete("/disconnect/", response=BoxDisconnectOut)
+@rate_limit_user
 def disconnect_box(request: HttpRequest) -> BoxDisconnectOut:
     app_client, user_id = get_storage_context(request)
     service = BoxService(app_client, user_id)
@@ -85,6 +90,7 @@ def disconnect_box(request: HttpRequest) -> BoxDisconnectOut:
 
 
 @router.get("/contents/", response=BoxContentsOut)
+@rate_limit_user
 def get_box_contents(request: HttpRequest) -> BoxContentsOut:
     app_client, user_id = get_storage_context(request)
     service = BoxService(app_client, user_id)

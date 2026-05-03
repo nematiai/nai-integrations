@@ -182,6 +182,20 @@ CELERY_TIMEZONE = TIME_ZONE
 # --- Token encryption (Fernet) ---
 TOKEN_ENCRYPTION_KEY = os.environ.get("TOKEN_ENCRYPTION_KEY", "")
 
+# --- Cache (Redis-backed; required by django-ratelimit) ---
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": REDIS_URL,
+    }
+}
+
+# --- Rate limiting (env-driven) ---
+RATELIMIT_USE_CACHE = "default"
+RATE_LIMIT_ANON = os.environ.get("RATE_LIMIT_ANON", "30/m")
+RATE_LIMIT_USER = os.environ.get("RATE_LIMIT_USER", "120/m")
+RATE_LIMIT_OAUTH = os.environ.get("RATE_LIMIT_OAUTH", "10/m")
+
 # --- Storage provider OAuth credentials ---
 # Box
 BOX_CLIENT_ID = os.environ.get("BOX_CLIENT_ID", "")

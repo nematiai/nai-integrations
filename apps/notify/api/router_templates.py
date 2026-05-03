@@ -3,6 +3,7 @@
 from django.shortcuts import get_object_or_404
 from ninja import Router
 
+from apps.core.base.rate_limit import rate_limit_user
 from apps.notify.models import NotificationChannel, NotificationTemplate
 
 from .router import _channel_to_list
@@ -36,6 +37,7 @@ def _tpl_detail(t: NotificationTemplate) -> TemplateDetailSchema:
 
 
 @router.get("/templates/", response=list[TemplateListSchema])
+@rate_limit_user
 def list_templates(request):
     return [
         TemplateListSchema(
@@ -52,6 +54,7 @@ def list_templates(request):
 @router.post(
     "/templates/", response={201: TemplateDetailSchema, 400: ValidationErrorSchema}
 )
+@rate_limit_user
 def create_template(request, payload: TemplateCreateSchema):
     t = NotificationTemplate.objects.create(
         name=payload.name,
@@ -66,11 +69,13 @@ def create_template(request, payload: TemplateCreateSchema):
 
 
 @router.get("/templates/{tid}/", response={200: TemplateDetailSchema, 404: ErrorSchema})
+@rate_limit_user
 def get_template(request, tid: int):
     return _tpl_detail(get_object_or_404(NotificationTemplate, id=tid))
 
 
 @router.put("/templates/{tid}/", response={200: TemplateDetailSchema, 404: ErrorSchema})
+@rate_limit_user
 def update_template(request, tid: int, payload: TemplateUpdateSchema):
     t = get_object_or_404(NotificationTemplate, id=tid)
     t.name = payload.name
@@ -86,6 +91,7 @@ def update_template(request, tid: int, payload: TemplateUpdateSchema):
 @router.patch(
     "/templates/{tid}/", response={200: TemplateDetailSchema, 404: ErrorSchema}
 )
+@rate_limit_user
 def patch_template(request, tid: int, payload: TemplatePatchSchema):
     t = get_object_or_404(NotificationTemplate, id=tid)
     if payload.name is not None:
@@ -105,6 +111,7 @@ def patch_template(request, tid: int, payload: TemplatePatchSchema):
 
 
 @router.delete("/templates/{tid}/", response={204: None, 404: ErrorSchema})
+@rate_limit_user
 def delete_template(request, tid: int):
     get_object_or_404(NotificationTemplate, id=tid).delete()
     return 204, None
@@ -114,6 +121,7 @@ def delete_template(request, tid: int):
     "/templates/{tid}/preview/",
     response={200: TemplatePreviewResponseSchema, 400: ErrorSchema, 404: ErrorSchema},
 )
+@rate_limit_user
 def preview_template(request, tid: int, payload: TemplatePreviewSchema):
     t = get_object_or_404(NotificationTemplate, id=tid)
     try:

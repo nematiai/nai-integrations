@@ -119,6 +119,9 @@ NEMI is a standalone Django microservice that provides unified integrations (soc
 - CLAUDE.md port drift: says 8010, actual is 8012 (Phase 1.2)
 - NEMI-TRACKING.md phase numbers misaligned with AUTH-AND-ROADMAP.md (deferred)
 - D12  Discord fixture/adapter mismatch (webhook_url vs BOT_TOKEN) → Phase 1.3 blocker
+- D13  DB_PASSWORD defaults to "nemi" in settings.py — tighten to require explicit value when DEBUG=False
+- D14  LOGGING config has no redaction filter — add SensitiveDataFilter for token/password/secret/api_key
+- D15  Dockerfile collectstatic uses SECRET_KEY=build-placeholder — rename to BUILD_ONLY_NOT_A_SECRET for clarity
 
 ### Phase 1: Core Engine + Easy Platforms (2 weeks)
 

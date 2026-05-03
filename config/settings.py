@@ -15,8 +15,17 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- Core ---
-SECRET_KEY = os.environ.get("SECRET_KEY", "change-me-in-production")
-DEBUG = os.environ.get("DEBUG", "true").lower() in ("true", "1", "yes")
+DEBUG = os.environ.get("DEBUG", "false").lower() in ("true", "1", "yes")
+SECRET_KEY = os.environ.get("SECRET_KEY", "")
+if not SECRET_KEY:
+    if DEBUG:
+        SECRET_KEY = "django-insecure-dev-only-do-not-use-in-production"
+    else:
+        from django.core.exceptions import ImproperlyConfigured
+
+        raise ImproperlyConfigured(
+            "SECRET_KEY environment variable is required when DEBUG=False"
+        )
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 # CSRF — required for admin panel behind Docker/proxy

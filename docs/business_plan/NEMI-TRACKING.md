@@ -122,6 +122,7 @@ NEMI is a standalone Django microservice that provides unified integrations (soc
 - D13  DB_PASSWORD defaults to "nemi" in settings.py — tighten to require explicit value when DEBUG=False
 - D14  LOGGING config has no redaction filter — add SensitiveDataFilter for token/password/secret/api_key
 - D15  Dockerfile collectstatic uses SECRET_KEY=build-placeholder — rename to BUILD_ONLY_NOT_A_SECRET for clarity
+- D16 (DEPLOY-GATE) — Before first production deploy, confirm running code is at or past commit 01ef04c. Pre-01ef04c builds silently stored encrypted token fields as plaintext when TOKEN_ENCRYPTION_KEY was missing. Verify _encrypt path raises ImproperlyConfigured before any real SocialAccount/StorageAccount row is persisted. Production never deployed pre-01ef04c — gate is preventive, not remedial.
 
 ### Phase 1: Core Engine + Easy Platforms (2 weeks)
 

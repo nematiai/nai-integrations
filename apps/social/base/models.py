@@ -74,18 +74,18 @@ class SocialAccount(models.Model):
 
     @classmethod
     def _encrypt(cls, plaintext: str) -> str:
-        """Encrypt a string for storage."""
+        """Encrypt a string for storage. Raises if encryption key is missing."""
         if not plaintext:
             return plaintext
         key = cls._get_encryption_key()
         if not key:
-            return plaintext
-        try:
-            f = Fernet(key.encode() if isinstance(key, str) else key)
-            return f.encrypt(plaintext.encode()).decode()
-        except Exception as e:
-            logger.error("Credential encryption failed: %s", e)
-            return plaintext
+            from django.core.exceptions import ImproperlyConfigured
+
+            raise ImproperlyConfigured(
+                "TOKEN_ENCRYPTION_KEY must be set; refusing to store credentials in plaintext"
+            )
+        f = Fernet(key.encode() if isinstance(key, str) else key)
+        return f.encrypt(plaintext.encode()).decode()
 
     @classmethod
     def _decrypt(cls, encrypted: str) -> str:

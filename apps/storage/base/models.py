@@ -71,18 +71,18 @@ class BaseCloudAuth(models.Model):
 
     @classmethod
     def _encrypt_token(cls, token: str) -> str:
-        """Encrypt a token for storage."""
+        """Encrypt a token for storage. Raises if encryption key is missing."""
         if not token:
             return token
         key = cls._get_encryption_key()
         if not key:
-            return token
-        try:
-            f = Fernet(key.encode() if isinstance(key, str) else key)
-            return f.encrypt(token.encode()).decode()
-        except Exception as e:
-            logger.error("Token encryption failed: %s", e)
-            return token
+            from django.core.exceptions import ImproperlyConfigured
+
+            raise ImproperlyConfigured(
+                "TOKEN_ENCRYPTION_KEY must be set; refusing to store tokens in plaintext"
+            )
+        f = Fernet(key.encode() if isinstance(key, str) else key)
+        return f.encrypt(token.encode()).decode()
 
     @classmethod
     def _decrypt_token(cls, encrypted: str) -> str:

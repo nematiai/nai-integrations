@@ -1,6 +1,7 @@
 """Tests for base classes."""
 
 import pytest
+from django.core.exceptions import ImproperlyConfigured
 from unittest.mock import MagicMock, patch
 
 
@@ -13,13 +14,19 @@ class TestBaseCloudAuth:
         decrypted = BaseCloudAuth._decrypt_token(encrypted)
         assert decrypted == original_token
 
-    def test_encrypt_without_key_returns_original(self):
+    def test_encrypt_without_key_raises(self):
         from apps.storage.base.models import BaseCloudAuth
 
-        original_token = "test_token"
         with patch.object(BaseCloudAuth, "_get_encryption_key", return_value=None):
-            encrypted = BaseCloudAuth._encrypt_token(original_token)
-            assert encrypted == original_token
+            with pytest.raises(ImproperlyConfigured, match="TOKEN_ENCRYPTION_KEY"):
+                BaseCloudAuth._encrypt_token("test_token")
+
+    def test_social_encrypt_without_key_raises(self):
+        from apps.social.base.models import SocialAccount
+
+        with patch.object(SocialAccount, "_get_encryption_key", return_value=None):
+            with pytest.raises(ImproperlyConfigured, match="TOKEN_ENCRYPTION_KEY"):
+                SocialAccount._encrypt("test_credentials")
 
 
 class TestBaseCloudService:

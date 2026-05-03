@@ -26,7 +26,7 @@ elif _test_env == "live":
 
 # --- Defaults for unit tests (used when no .env.test* is loaded) ---
 os.environ.setdefault(
-    "TOKEN_ENCRYPTION_KEY", "VGVzdEVuY3J5cHRpb25LZXkxMjM0NTY3ODkwMTI="
+    "TOKEN_ENCRYPTION_KEY", "MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
 )
 os.environ.setdefault("SECRET_KEY", "test-secret-key")
 
@@ -40,7 +40,7 @@ DATABASES = {
     }
 }
 
-TOKEN_ENCRYPTION_KEY = "VGVzdEVuY3J5cHRpb25LZXkxMjM0NTY3ODkwMTI="
+TOKEN_ENCRYPTION_KEY = "MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
 REDIS_URL = "redis://localhost:6379/0"
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = False

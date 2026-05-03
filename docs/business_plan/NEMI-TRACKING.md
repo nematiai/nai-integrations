@@ -118,6 +118,7 @@ NEMI is a standalone Django microservice that provides unified integrations (soc
 - REQ-LOCK: pin all dependencies + add lockfile (Phase 1.2)
 - CLAUDE.md port drift: says 8010, actual is 8012 (Phase 1.2)
 - NEMI-TRACKING.md phase numbers misaligned with AUTH-AND-ROADMAP.md (deferred)
+- D12  Discord fixture/adapter mismatch (webhook_url vs BOT_TOKEN) → Phase 1.3 blocker
 
 ### Phase 1: Core Engine + Easy Platforms (2 weeks)
 

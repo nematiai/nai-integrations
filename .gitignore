@@ -55,3 +55,7 @@ ENV/
 Thumbs.db
 # Claude Code local config (per-developer, not versioned)
 .claude/settings.local.json
+# nai-security GeoIP database (downloaded at build/runtime, ~6 MB)
+geoip/
+# scratch dirs from audits (not versioned)
+_audit_*/

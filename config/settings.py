@@ -44,6 +44,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Security stack (nai-security + its optional deps)
+    "axes",
+    "import_export",
+    "nai_security",
     # NEMI apps
     "apps.core",
     "apps.storage.box",
@@ -62,6 +66,8 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "nai_security.middleware.SecurityMiddleware",
+    "nai_security.middleware.RateLimitLoggingMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "apps.core.auth.middleware.ApiKeyAuthMiddleware",
@@ -181,6 +187,23 @@ CELERY_TIMEZONE = TIME_ZONE
 
 # --- Token encryption (Fernet) ---
 TOKEN_ENCRYPTION_KEY = os.environ.get("TOKEN_ENCRYPTION_KEY", "")
+
+# --- nai-security ---
+AXES_HANDLER = "nai_security.handlers.axes_integration.DynamicAxesHandler"
+AUTHENTICATION_BACKENDS = [
+    "axes.backends.AxesStandaloneBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+GEOIP_PATH = os.environ.get(
+    "GEOIP_PATH",
+    str(BASE_DIR / "geoip" / "GeoLite2-Country.mmdb"),
+)
+NAI_SECURITY_EXEMPT_PATHS = [
+    "/api/v1/health/",
+    "/health/",
+    "/ready/",
+    "/favicon.ico",
+]
 
 # --- Storage provider OAuth credentials ---
 # Box

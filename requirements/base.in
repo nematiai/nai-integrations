@@ -22,6 +22,7 @@ apprise==1.9.7
 
 # Security
 cryptography>=41.0
+nai-security[all]==1.10.0
 
 # Static files
 whitenoise>=6.5

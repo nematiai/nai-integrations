@@ -9,7 +9,6 @@ from django.http import HttpRequest
 from ninja import Router
 from ninja.errors import HttpError
 
-from apps.core.base.rate_limit import rate_limit_oauth, rate_limit_user
 from apps.storage.base.helpers import get_storage_context
 
 from .schemas import (
@@ -26,7 +25,6 @@ router = Router(tags=["OneDrive Integration"])
 
 
 @router.get("/status/", response=OneDriveStatusOut)
-@rate_limit_user
 def get_onedrive_status(request: HttpRequest) -> OneDriveStatusOut:
     app_client, user_id = get_storage_context(request)
     service = OneDriveService(app_client, user_id)
@@ -34,7 +32,6 @@ def get_onedrive_status(request: HttpRequest) -> OneDriveStatusOut:
 
 
 @router.post("/authorize/", response=OneDriveAuthorizeOut)
-@rate_limit_user
 def authorize_onedrive(request: HttpRequest) -> OneDriveAuthorizeOut:
     app_client, user_id = get_storage_context(request)
     callback_url = getattr(settings, "ONEDRIVE_REDIRECT_URI", "")
@@ -49,7 +46,6 @@ def authorize_onedrive(request: HttpRequest) -> OneDriveAuthorizeOut:
 
 
 @router.post("/callback/")
-@rate_limit_oauth
 def onedrive_callback(request: HttpRequest) -> Dict[str, Any]:
     """NAI forwards the OAuth code here."""
     app_client, user_id = get_storage_context(request)
@@ -78,7 +74,6 @@ def onedrive_callback(request: HttpRequest) -> Dict[str, Any]:
 
 
 @router.delete("/disconnect/", response=OneDriveDisconnectOut)
-@rate_limit_user
 def disconnect_onedrive(request: HttpRequest) -> OneDriveDisconnectOut:
     app_client, user_id = get_storage_context(request)
     service = OneDriveService(app_client, user_id)
@@ -92,7 +87,6 @@ def disconnect_onedrive(request: HttpRequest) -> OneDriveDisconnectOut:
 
 
 @router.get("/contents/", response=OneDriveContentsOut)
-@rate_limit_user
 def get_onedrive_contents(request: HttpRequest) -> OneDriveContentsOut:
     app_client, user_id = get_storage_context(request)
     service = OneDriveService(app_client, user_id)

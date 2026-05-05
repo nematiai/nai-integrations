@@ -9,7 +9,6 @@ from ninja import Router
 from ninja.errors import HttpError
 
 from apps.core.base.exceptions import ConfigurationError
-from apps.core.base.rate_limit import rate_limit_user
 from apps.social.base.helpers import get_social_context
 from apps.social.base.models import SocialAccount
 from apps.social.base.schemas import (
@@ -52,7 +51,6 @@ def _run_health_check(account: SocialAccount, adapter) -> bool:
 
 
 @router.post("/accounts", response={201: AccountOut})
-@rate_limit_user
 def register_account(request: HttpRequest, payload: RegisterAccountIn):
     """Register a social media account after validating credentials."""
     app_client, user_id = get_social_context(request)
@@ -79,7 +77,6 @@ def register_account(request: HttpRequest, payload: RegisterAccountIn):
 
 
 @router.get("/accounts", response=List[AccountOut])
-@rate_limit_user
 def list_accounts(request: HttpRequest) -> List[AccountOut]:
     """List registered social accounts (credentials never returned)."""
     app_client, user_id = get_social_context(request)
@@ -101,7 +98,6 @@ def list_accounts(request: HttpRequest) -> List[AccountOut]:
 
 
 @router.delete("/accounts/{platform}")
-@rate_limit_user
 def delete_account(request: HttpRequest, platform: str) -> dict:
     """Soft-delete a social account (set is_active=False)."""
     app_client, user_id = get_social_context(request)
@@ -120,7 +116,6 @@ def delete_account(request: HttpRequest, platform: str) -> dict:
 
 
 @router.post("/accounts/{platform}/health", response=HealthOut)
-@rate_limit_user
 def check_account_health(request: HttpRequest, platform: str) -> HealthOut:
     """Run a live health check against the registered account."""
     app_client, user_id = get_social_context(request)

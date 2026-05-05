@@ -6,7 +6,6 @@ from typing import List
 from django.http import HttpRequest
 from ninja import Router
 
-from apps.core.base.rate_limit import rate_limit_user
 from apps.social.base.helpers import get_social_context
 from apps.social.base.models import PostLog, SocialAccount
 from apps.social.base.schemas import PlatformOut, PostIn, PostOut
@@ -18,7 +17,6 @@ router = Router(tags=["Social Posting"])
 
 
 @router.post("/post", response=List[PostOut])
-@rate_limit_user
 def create_post(request: HttpRequest, payload: PostIn) -> List[PostOut]:
     """Queue a post to one or more platforms via Celery."""
     app_client, user_id = get_social_context(request)
@@ -59,7 +57,6 @@ def create_post(request: HttpRequest, payload: PostIn) -> List[PostOut]:
 
 
 @router.get("/platforms", response=List[PlatformOut])
-@rate_limit_user
 def list_platforms_endpoint(request: HttpRequest) -> List[PlatformOut]:
     """Return all registered adapter platforms and whether the user has them."""
     app_client, user_id = get_social_context(request)
@@ -82,7 +79,6 @@ def list_platforms_endpoint(request: HttpRequest) -> List[PlatformOut]:
 
 
 @router.get("/logs", response=List[PostOut])
-@rate_limit_user
 def list_post_logs(request: HttpRequest) -> List[PostOut]:
     """Return post history for the authenticated user."""
     app_client, user_id = get_social_context(request)

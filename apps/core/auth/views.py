@@ -4,8 +4,6 @@ import logging
 
 from ninja import Router
 
-from apps.core.base.rate_limit import rate_limit_anon, rate_limit_user
-
 from .models import AppClient
 from .schemas import (
     ErrorSchema,
@@ -23,7 +21,6 @@ router = Router(tags=["auth"])
     response={201: RegisterResponseSchema, 400: ErrorSchema},
     auth=None,
 )
-@rate_limit_anon
 def register_app(request, payload: RegisterRequestSchema):
     """Register a new app client and return its API key."""
     if AppClient.objects.filter(name=payload.name).exists():
@@ -49,7 +46,6 @@ def register_app(request, payload: RegisterRequestSchema):
     "/rotate-key",
     response={200: RotateKeyResponseSchema, 401: ErrorSchema},
 )
-@rate_limit_user
 def rotate_key(request):
     """Rotate the API key for the authenticated app client."""
     if not getattr(request, "app_client", None):

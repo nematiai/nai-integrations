@@ -47,14 +47,3 @@ CELERY_TASK_EAGER_PROPAGATES = False
 CELERY_BROKER_URL = "memory://"
 DEBUG = False
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
-
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "rate-limit-tests",
-    }
-}
-RATELIMIT_USE_CACHE = "default"
-RATE_LIMIT_ANON = "30/m"
-RATE_LIMIT_USER = "120/m"
-RATE_LIMIT_OAUTH = "10/m"
